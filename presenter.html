@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="en-ZA">
+<head>
+  <meta charset="utf-8">
+  <meta name="robots" content="noindex, nofollow">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self' data: blob:; style-src 'self' 'unsafe-inline'">
+  <meta name="referrer" content="no-referrer">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#121b47">
+  <title>Foodie — guided presentation</title>
+  <link rel="icon" href="assets/img/icon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="assets/css/app.css">
+</head>
+<body class="presenter">
+  <div class="pres">
+    <aside class="script" id="script"></aside>
+    <section class="stage">
+      <div class="stage-tabs" id="stage-tabs" role="tablist" aria-label="Interface"></div>
+      <div class="frames">
+        <iframe id="frame-customer" class="phone-frame" title="Customer app" src="customer.html"></iframe>
+        <iframe id="frame-chef" class="phone-frame" title="Chef app" src="chef.html"></iframe>
+        <iframe id="frame-admin" class="wide-frame" title="Admin dashboard" src="admin.html"></iframe>
+      </div>
+    </section>
+  </div>
+  <script type="module" src="js/presenter.js"></script>
+</body>
+</html>

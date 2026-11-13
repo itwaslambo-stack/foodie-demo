@@ -1,0 +1,222 @@
+[
+  {
+    "id": "beef-tacos",
+    "meal": "Beef Tacos with Salsa & Guacamole",
+    "title": "001 Tacos de carnitas, carne asada y al pastor.jpg",
+    "author": "Larry Miller",
+    "licence": "CC BY-SA 2.0",
+    "licenceUrl": "https://creativecommons.org/licenses/by-sa/2.0",
+    "page": "https://commons.wikimedia.org/wiki/File:001_Tacos_de_carnitas,_carne_asada_y_al_pastor.jpg",
+    "changes": "Cropped and resized"
+  },
+  {
+    "id": "braai-platter",
+    "meal": "Braai Platter with Pap & Chakalaka",
+    "title": "Boerewors braai.jpg",
+    "author": "Ossewa",
+    "licence": "CC BY-SA 4.0",
+    "licenceUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+    "page": "https://commons.wikimedia.org/wiki/File:Boerewors_braai.jpg",
+    "changes": "Cropped and resized"
+  },
+  {
+    "id": "peri-peri-chicken",
+    "meal": "Braaied Peri-Peri Chicken & Braaibroodjies",
+    "title": "Flame-grilled PERi-PERi chicken.jpg",
+    "author": "Banej",
+    "licence": "CC BY-SA 4.0",
+    "licenceUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+    "page": "https://commons.wikimedia.org/wiki/File:Flame-grilled_PERi-PERi_chicken.jpg",
+    "changes": "Cropped and resized"
+  },
+  {
+    "id": "california-maki",
+    "meal": "California Roll & Maki Platter",
+    "title": "California Roll (16656740928).jpg",
+    "author": "Prayitno / Thank you for (12 millions +) view from Los Angeles, USA",
+    "licence": "CC BY 2.0",
+    "licenceUrl": "https://creativecommons.org/licenses/by/2.0",
+    "page": "https://commons.wikimedia.org/wiki/File:California_Roll_(16656740928).jpg",
+    "changes": "Cropped and resized"
+  },
+  {
+    "id": "chicken-quesadillas",
+    "meal": "Chicken Quesadillas & Mexican Rice",
+    "title": "At Long Island 2023 267.jpg",
+    "author": "Photograph by Mike Peel (www.mikepeel.net).",
+    "licence": "CC BY-SA 4.0",
+    "licenceUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+    "page": "https://commons.wikimedia.org/wiki/File:At_Long_Island_2023_267.jpg",
+    "changes": "Cropped and resized"
+  },
+  {
+    "id": "chicken-alfredo",
+    "meal": "Creamy Chicken Alfredo",
+    "title": "Fettuccini alfredo with grilled chicken (Medici) (53448852).jpg",
+    "author": "Kim Scarborough from Chicago, IL",
+    "licence": "CC BY-SA 2.0",
+    "licenceUrl": "https://creativecommons.org/licenses/by-sa/2.0",
+    "page": "https://commons.wikimedia.org/wiki/File:Fettuccini_alfredo_with_grilled_chicken_(Medici)_(53448852).jpg",
+    "changes": "Cropped and resized"
+  },
+  {
+    "id": "flapjacks",
+    "meal": "Flapjacks, Berries & Honey",
+    "title": "Pancakes with Berries (Unsplash).jpg",
+    "author": "Herson Rodriguez hero",
+    "licence": "CC0",
+    "licenceUrl": "http://creativecommons.org/publicdomain/zero/1.0/deed.en",
+    "page": "https://commons.wikimedia.org/wiki/File:Pancakes_with_Berries_(Unsplash).jpg",
+    "changes": "Cropped and resized"
+  },
+  {
+    "id": "full-breakfast",
+    "meal": "Full Farmhouse Breakfast",
+    "title": "Full English breakfast at the Chalet Cafe, Cowfold, West Sussex, England.jpg",
+    "author": "Acabashi",
+    "licence": "CC BY-SA 4.0",
+    "licenceUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+    "page": "https://commons.wikimedia.org/wiki/File:Full_English_breakfast_at_the_Chalet_Cafe,_Cowfold,_West_Sussex,_England.jpg",
+    "changes": "Cropped and resized"
+  },
+  {
+    "id": "lamb-chops-mielies",
+    "meal": "Lamb Chops, Mielies & Potato Salad",
+    "title": "Dinner on Tuesday Lamb chops, sauted new potatoes, peas and beans with redcurrant jelly and mint sauce - cooked in the tent on a Campingaz Chef Folding Double Burner Stove and Grill (46940947225).jpg",
+    "author": "CharmaineZoe's Marvelous Melange from England",
+    "licence": "CC BY 2.0",
+    "licenceUrl": "https://creativecommons.org/licenses/by/2.0",
+    "page": "https://commons.wikimedia.org/wiki/File:Dinner_on_Tuesday_Lamb_chops,_sauted_new_potatoes,_peas_and_beans_with_redcurrant_jelly_and_mint_sauce_-_cooked_in_the_tent_on_a_Campingaz_Chef_Folding_Double_Burner_Stove_and_Grill_(46940947225).jpg",
+    "changes": "Cropped and resized"
+  },
+  {
+    "id": "lasagne",
+    "meal": "Lasagne al Forno",
+    "title": "Meaty Lasagna 8of8 (8736299782).jpg",
+    "author": "Breville USA",
+    "licence": "CC BY 2.0",
+    "licenceUrl": "https://creativecommons.org/licenses/by/2.0",
+    "page": "https://commons.wikimedia.org/wiki/File:Meaty_Lasagna_8of8_(8736299782).jpg",
+    "changes": "Cropped and resized"
+  },
+  {
+    "id": "omelette-avo",
+    "meal": "Omelette, Avo & Toast",
+    "title": "Omelette-Plate.jpg",
+    "author": "MaedaAkihiko",
+    "licence": "CC BY-SA 4.0",
+    "licenceUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+    "page": "https://commons.wikimedia.org/wiki/File:Omelette-Plate.jpg",
+    "changes": "Cropped and resized"
+  },
+  {
+    "id": "oxtail-dombolo",
+    "meal": "Oxtail & Dombolo",
+    "title": "Slow Cooker Oxtail Stew with Mashed Potatoes and Brussels Sprouts - 7 4 2019 (47562493681).jpg",
+    "author": "CharmaineZoe's Marvelous Melange from England",
+    "licence": "CC BY 2.0",
+    "licenceUrl": "https://creativecommons.org/licenses/by/2.0",
+    "page": "https://commons.wikimedia.org/wiki/File:Slow_Cooker_Oxtail_Stew_with_Mashed_Potatoes_and_Brussels_Sprouts_-_7_4_2019_(47562493681).jpg",
+    "changes": "Cropped and resized"
+  },
+  {
+    "id": "pap-beef-stew-vegetables",
+    "meal": "Pap, Beef Stew & Vegetables",
+    "title": "Tanzania Food Ugali and Mlenda.jpg",
+    "author": "MWANI",
+    "licence": "CC BY-SA 4.0",
+    "licenceUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+    "page": "https://commons.wikimedia.org/wiki/File:Tanzania_Food_Ugali_and_Mlenda.jpg",
+    "changes": "Cropped and resized"
+  },
+  {
+    "id": "pap-chicken-cabbage",
+    "meal": "Pap, Chicken & Cabbage",
+    "title": "Tanzania food - Ugali na kuku wa kienyeji wa kuchoma.jpg",
+    "author": "Fredrick Mboma",
+    "licence": "CC BY-SA 4.0",
+    "licenceUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+    "page": "https://commons.wikimedia.org/wiki/File:Tanzania_food_-_Ugali_na_kuku_wa_kienyeji_wa_kuchoma.jpg",
+    "changes": "Cropped and resized"
+  },
+  {
+    "id": "pap-mokgodu-cabbage",
+    "meal": "Pap, Mokgodu & Cabbage (stand-in photo)",
+    "title": "Chicken liver with pap.JPG",
+    "author": "Shereen Mmakola",
+    "licence": "CC BY-SA 4.0",
+    "licenceUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+    "page": "https://commons.wikimedia.org/wiki/File:Chicken_liver_with_pap.JPG",
+    "changes": "Cropped and resized"
+  },
+  {
+    "id": "roast-lamb",
+    "meal": "Roast Leg of Lamb, Potatoes & Gravy",
+    "title": "Roast leg of lamb - Easter 2019 (33811011038).jpg",
+    "author": "CharmaineZoe's Marvelous Melange from England",
+    "licence": "CC BY 2.0",
+    "licenceUrl": "https://creativecommons.org/licenses/by/2.0",
+    "page": "https://commons.wikimedia.org/wiki/File:Roast_leg_of_lamb_-_Easter_2019_(33811011038).jpg",
+    "changes": "Cropped and resized"
+  },
+  {
+    "id": "salmon-platter",
+    "meal": "Salmon Sushi Platter",
+    "title": "Nigiri Sushi (26478725732).jpg",
+    "author": "Tim Reckmann from Hamm, Deutschland",
+    "licence": "CC BY 2.0",
+    "licenceUrl": "https://creativecommons.org/licenses/by/2.0",
+    "page": "https://commons.wikimedia.org/wiki/File:Nigiri_Sushi_(26478725732).jpg",
+    "changes": "Cropped and resized"
+  },
+  {
+    "id": "samp-beans-lamb",
+    "meal": "Samp, Beans & Lamb Stew",
+    "title": "Umngqusho.jpg",
+    "author": "Jon Mountjoy",
+    "licence": "CC BY 2.0",
+    "licenceUrl": "https://creativecommons.org/licenses/by/2.0",
+    "page": "https://commons.wikimedia.org/wiki/File:Umngqusho.jpg",
+    "changes": "Cropped and resized"
+  },
+  {
+    "id": "seven-colours",
+    "meal": "Seven Colours Sunday Plate",
+    "title": "Wedding food in Nairobi.jpg",
+    "author": "4littlewords",
+    "licence": "CC BY-SA 4.0",
+    "licenceUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+    "page": "https://commons.wikimedia.org/wiki/File:Wedding_food_in_Nairobi.jpg",
+    "changes": "Cropped and resized"
+  },
+  {
+    "id": "sirloin-chips",
+    "meal": "Sirloin Steak, Chips & Pepper Sauce",
+    "title": "Reel and Brand - September 2021 - Sarah Stierch 05.jpg",
+    "author": "Missvain",
+    "licence": "CC BY 4.0",
+    "licenceUrl": "https://creativecommons.org/licenses/by/4.0",
+    "page": "https://commons.wikimedia.org/wiki/File:Reel_and_Brand_-_September_2021_-_Sarah_Stierch_05.jpg",
+    "changes": "Cropped and resized"
+  },
+  {
+    "id": "bolognese",
+    "meal": "Spaghetti Bolognese",
+    "title": "Spaghetti Bolognese von Unico Tauberbischofsheim.jpg",
+    "author": "Triplec85",
+    "licence": "CC BY-SA 4.0",
+    "licenceUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+    "page": "https://commons.wikimedia.org/wiki/File:Spaghetti_Bolognese_von_Unico_Tauberbischofsheim.jpg",
+    "changes": "Cropped and resized"
+  },
+  {
+    "id": "tbone-spinach",
+    "meal": "T-Bone, Creamed Spinach & Roast Potatoes",
+    "title": "Vegas 2016 - 28804449366.jpg",
+    "author": "Bob n Renee",
+    "licence": "CC BY 2.0",
+    "licenceUrl": "https://creativecommons.org/licenses/by/2.0",
+    "page": "https://commons.wikimedia.org/wiki/File:Vegas_2016_-_28804449366.jpg",
+    "changes": "Cropped and resized"
+  }
+]
