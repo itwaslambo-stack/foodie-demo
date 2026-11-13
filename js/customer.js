@@ -171,6 +171,7 @@ function homeView() {
   const next = myBookings().filter((b) => R.isOpen(b.status)).sort((a, b) => a.scheduledAt - b.scheduledAt)[0];
   const toReview = myBookings().find((b) => b.status === 'completed' && !b.review);
   const favourites = ['pap-beef-stew-vegetables', 'seven-colours', 'braai-platter', 'salmon-platter', 'sirloin-chips'].map((id) => S().meals.find((m) => m.id === id && m.active && S().categories.some((c) => c.id === m.categoryId && c.active))).filter(Boolean);
+  const [feature, ...more] = favourites;
   return shell(html`<main class="screen"><div class="pad stack">
       <div class="row spread top hello">
         <div><p class="muted">Hi ${c.firstName}</p><h1>What are you feeling like eating today?</h1></div>
@@ -181,13 +182,18 @@ function homeView() {
           <div class="grow"><p class="small muted">${R.ACTIVE_STATUSES.includes(next.status) ? 'Happening now' : 'Your next Dishit'}</p><p class="strong">${next.mealName}</p><p class="small">${dateShort(next.scheduledAt)} at ${time(next.scheduledAt)}, ${R.LABELS.booking[next.status].toLowerCase()}</p></div>
         </a>` : ''}
       ${toReview && !next ? html`<a class="card mielie mini-booking" href="#/booking/${toReview.id}">${photo(toReview.image, '')}<div class="grow"><p class="strong">How was your ${toReview.mealName}?</p><p class="small">Leave a review</p></div></a>` : ''}
-      <div class="cat-grid">
+      ${feature ? html`<a class="feature" href="#/meal/${feature.id}">
+          ${photo(feature.image, feature.name)}
+          <div class="cap"><span class="kicker">Booked most this month</span><h3>${feature.name}</h3><p>From ${money(feature.basePriceCents)} for ${R.POLICY.baseServings} people</p></div>
+        </a>` : ''}
+      <div><div class="section-title"><h2>Choose your kind of meal</h2></div>
+        <div class="cat-grid">
         ${activeCategories().map((cat) => html`<a class="cat" href="#/category/${cat.id}">
           <div class="plate">${photo(cat.image, '')}</div><strong>${cat.name}</strong>
         </a>`)}
-      </div>
-      ${favourites.length ? html`<div><h2 style="margin-bottom:12px">Booked most this month</h2>
-        <div class="hscroll">${favourites.map(mealCard)}</div></div>` : ''}
+        </div></div>
+      ${more.length ? html`<div><div class="section-title"><h2>More favourites</h2></div>
+        <div class="hscroll">${more.map(mealCard)}</div></div>` : ''}
       <p class="demo-note">Demonstration content. Meals, prices and photos are samples, not approved commercial pricing.</p>
     </div></main>`);
 }
@@ -235,7 +241,7 @@ function mealView(id) {
           </details>
         </div>
       </div>
-    </main>`, { tabs: false, footer: html`<a class="btn primary block" href="#/book/${m.id}">Book this meal</a>` });
+    </main>`, { tabs: false, footer: html`<p class="from"><b>${money(m.basePriceCents)}</b><span>for ${R.POLICY.baseServings} people</span></p><a class="btn primary" href="#/book/${m.id}">Book this meal</a>` });
 }
 
 // --------------------------------------------------------------- booking
