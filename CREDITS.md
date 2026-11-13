@@ -1,6 +1,6 @@
 # Photo credits
 
-Every meal photo comes from Wikimedia Commons under a free licence. Each was cropped square, resized and converted to WebP. Photos are illustrations for the demonstration: they are not photos of Foodie meals.
+Every meal photo comes from Wikimedia Commons under a free licence. Each was cropped square, resized and converted to WebP. Photos are illustrations for the demonstration: they are not photos of Dishit meals.
 
 | Meal | Photo | Author | Licence |
 |---|---|---|---|
@@ -27,4 +27,6 @@ Every meal photo comes from Wikimedia Commons under a free licence. Each was cro
 | Spaghetti Bolognese | [Spaghetti Bolognese von Unico Tauberbischofsheim.jpg](https://commons.wikimedia.org/wiki/File:Spaghetti_Bolognese_von_Unico_Tauberbischofsheim.jpg) | Triplec85 | [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0) |
 | T-Bone, Creamed Spinach & Roast Potatoes | [Vegas 2016 - 28804449366.jpg](https://commons.wikimedia.org/wiki/File:Vegas_2016_-_28804449366.jpg) | Bob n Renee | [CC BY 2.0](https://creativecommons.org/licenses/by/2.0) |
 
-Fonts: Bricolage Grotesque and Hanken Grotesk, both under the SIL Open Font License 1.1.
+Fonts: Nunito and Nunito Sans (Google Fonts, latin subset), both under the SIL Open Font License 1.1.
+
+Logo and fork icon: Dishit brand identity guidelines v1.0 (October 2026). The PNGs in `app/assets/img/brand/` were cleaned from the guideline's embedded logo (letters set to Ink or white, fork to Fork Red #FA3536, fork edge sharpened). A vector (SVG) master is still needed, as the guideline itself notes.

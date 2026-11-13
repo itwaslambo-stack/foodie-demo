@@ -10,7 +10,7 @@ const frames = Object.fromEntries(Object.keys(VIEWS).map((v) => [v, document.get
 const scriptEl = document.getElementById('script');
 const tabsEl = document.getElementById('stage-tabs');
 
-let current = Math.min(STEPS.length, Math.max(1, Number(sessionStorage.getItem('foodie.presenter.step')) || 1));
+let current = Math.min(STEPS.length, Math.max(1, Number(sessionStorage.getItem('dishit.presenter.step')) || 1));
 let visible = STEPS[current - 1].view;
 
 const step = (n) => STEPS[n - 1];
@@ -26,7 +26,7 @@ function show(view, route) {
 
 function setCurrent(n, { navigate = true } = {}) {
   current = Math.min(STEPS.length, Math.max(1, n));
-  sessionStorage.setItem('foodie.presenter.step', String(current));
+  sessionStorage.setItem('dishit.presenter.step', String(current));
   const s = step(current);
   show(s.view, navigate ? routeFor(s, store.getState()) : null);
   render();
@@ -43,7 +43,7 @@ function render() {
   const state = store.getState();
   const b = findDemoBooking(state);
   scriptEl.innerHTML = String(html`<div class="script-head">
-      <div class="row spread"><div class="wordmark">foodie<span style="color:var(--mielie)">.</span></div><span class="chip indigo plain">Step ${current} of ${STEPS.length}</span></div>
+      <div class="row spread"><span class="logo-pair"><img class="logo logo-light" src="assets/img/brand/logo.png" alt="Dishit" width="1017" height="411"><img class="logo logo-dark" src="assets/img/brand/logo-dark.png" alt="" width="1017" height="411"></span><span class="chip indigo plain">Step ${current} of ${STEPS.length}</span></div>
       <p class="small muted" style="margin-top:4px">Thandi books Pap, Beef Stew &amp; Vegetables for 4. Demo time <strong>${dateTime(store.now())}</strong>${b ? html`, booking <strong>${b.ref}</strong>` : ''}.</p>
     </div>
     <ol class="script-list">${STEPS.map((s) => {

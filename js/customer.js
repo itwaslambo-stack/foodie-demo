@@ -1,4 +1,4 @@
-// Foodie customer app (demo). Every price, refund and status on these screens
+// Dishit customer app (demo). Every price, refund and status on these screens
 // comes from the shared store and rules, never from this file.
 
 import * as R from './shared/rules.js';
@@ -46,7 +46,7 @@ function tabBar() {
   const tab = (href, label, name, match, badge = 0) => html`<a href="${href}" aria-current="${match.test(here) ? 'page' : 'false'}">${icon(name)}${label}${badge ? html`<span class="badge">${badge}</span>` : ''}</a>`;
   return html`<nav class="tabs" aria-label="Main">
     ${tab('#/home', 'Home', 'home', /^#\/(home|category|meal)/)}
-    ${tab('#/bookings', 'My Foodie', 'list', /^#\/booking/)}
+    ${tab('#/bookings', 'My Dishit', 'list', /^#\/booking/)}
     ${tab('#/alerts', 'Alerts', 'bell', /^#\/alerts/, unread())}
     ${tab('#/account', 'Account', 'user', /^#\/(account|info)/)}
   </nav>`;
@@ -80,8 +80,8 @@ function welcomeView() {
         <div class="plate p3">${photo(img('seven-colours'), '')}</div>
       </div>
       <div class="welcome-body">
-        <div class="wordmark">foodie<span>.</span></div>
-        <p class="tag">You choose the food.<br>We bring the chef.</p>
+        <img class="logo" src="assets/img/brand/logo-dark.png" alt="Dishit" width="1017" height="411">
+        <p class="tag">You choose the food.<br><span class="smile">We bring the chef.</span></p>
         <div class="stack-s">
           <a class="btn primary block" href="#/register">Create account</a>
           <a class="btn ghost block" href="#/login">Log in</a>
@@ -103,7 +103,7 @@ function loginView() {
       ${field('login', 'password', 'Password', { type: 'password', autocomplete: 'current-password' })}
       ${forms.message ? html`<p class="error" role="alert">${forms.message}</p>` : ''}
       <button class="btn block ghost" type="submit">Log in</button>
-      <p class="small muted">New to Foodie? <a href="#/register">Create an account</a></p>
+      <p class="small muted">New to Dishit? <a href="#/register">Create an account</a></p>
     </form></main>${demoPanel()}`;
 }
 
@@ -175,10 +175,10 @@ function homeView() {
       <div class="row spread top hello">
         <div><p class="muted">Hi ${c.firstName}</p><h1>What are you feeling like eating today?</h1></div>
       </div>
-      ${c.discount ? html`<div class="card mielie"><p class="strong">${c.discount.pct}% off your next Foodie</p><p class="small">Your last chef arrived late. The discount comes off automatically at checkout.</p></div>` : ''}
+      ${c.discount ? html`<div class="card mielie"><p class="strong">${c.discount.pct}% off your next Dishit</p><p class="small">Your last chef arrived late. The discount comes off automatically at checkout.</p></div>` : ''}
       ${next ? html`<a class="card indigo mini-booking" href="#/booking/${next.id}">
           ${photo(next.image, '')}
-          <div class="grow"><p class="small muted">${R.ACTIVE_STATUSES.includes(next.status) ? 'Happening now' : 'Your next Foodie'}</p><p class="strong">${next.mealName}</p><p class="small">${dateShort(next.scheduledAt)} at ${time(next.scheduledAt)}, ${R.LABELS.booking[next.status].toLowerCase()}</p></div>
+          <div class="grow"><p class="small muted">${R.ACTIVE_STATUSES.includes(next.status) ? 'Happening now' : 'Your next Dishit'}</p><p class="strong">${next.mealName}</p><p class="small">${dateShort(next.scheduledAt)} at ${time(next.scheduledAt)}, ${R.LABELS.booking[next.status].toLowerCase()}</p></div>
         </a>` : ''}
       ${toReview && !next ? html`<a class="card mielie mini-booking" href="#/booking/${toReview.id}">${photo(toReview.image, '')}<div class="grow"><p class="strong">How was your ${toReview.mealName}?</p><p class="small">Leave a review</p></div></a>` : ''}
       <div class="cat-grid">
@@ -199,7 +199,7 @@ function categoryView(id) {
   return shell(html`${topbar(cat.name, '#/home')}
     <main class="screen"><div class="pad stack">
       <p class="muted">${cat.blurb}</p>
-      ${meals.length ? meals.map(mealCard) : html`<div class="empty"><h3>No meals here yet</h3><p>Foodie is adding meals to this category. Try another one.</p><p style="margin-top:12px"><a class="btn small ghost" href="#/home">See all categories</a></p></div>`}
+      ${meals.length ? meals.map(mealCard) : html`<div class="empty"><h3>No meals here yet</h3><p>Dishit is adding meals to this category. Try another one.</p><p style="margin-top:12px"><a class="btn small ghost" href="#/home">See all categories</a></p></div>`}
     </div></main>`);
 }
 
@@ -222,7 +222,7 @@ function mealView(id) {
         <div><h3 style="margin-bottom:6px">What is included</h3><ul class="tick-list">${m.included.map((x) => html`<li>${x}</li>`)}<li>Your chef cooks, serves and cleans up after cooking</li></ul></div>
         <div>
           <details class="more" id="d-ing" open><summary>Ingredients you buy</summary>
-            <p class="small muted">Foodie does not supply groceries. Your chef confirms this list after accepting your booking.</p>
+            <p class="small muted">Dishit does not supply groceries. Your chef confirms this list after accepting your booking.</p>
             ${m.ingredients.map((g) => html`<p><strong>${g.group}:</strong> ${g.items.map((i) => i.name).join(', ')}</p>`)}
           </details>
           <details class="more" id="d-all"><summary>Dietary and allergen information</summary>
@@ -240,7 +240,7 @@ function mealView(id) {
 
 // --------------------------------------------------------------- booking
 
-const WIZARD = ['How many people?', 'When should your chef arrive?', 'Where will your chef cook?', 'Your Foodie booking', 'Payment'];
+const WIZARD = ['How many people?', 'When should your chef arrive?', 'Where will your chef cook?', 'Your Dishit booking', 'Payment'];
 
 function bookView(mealId, query) {
   const m = S().meals.find((x) => x.id === mealId && x.active && activeCategories().some((c) => c.id === x.categoryId));
@@ -263,7 +263,7 @@ function bookView(mealId, query) {
       <div class="card flat" style="margin-top:20px"><dl class="kv">
         <dt>${R.POLICY.baseServings} people</dt><dd class="num">${money(m.basePriceCents)}</dd>
         ${d.servings > R.POLICY.baseServings ? html`<dt>${d.servings - R.POLICY.baseServings} extra at ${money(m.extraPersonCents)}</dt><dd class="num">${money((d.servings - R.POLICY.baseServings) * m.extraPersonCents)}</dd>` : ''}
-        <div class="total" style="display:contents"><dt>Foodie service</dt><dd class="num" id="live-price">${money(q.serviceAmount)}</dd></div>
+        <div class="total" style="display:contents"><dt>Dishit service</dt><dd class="num" id="live-price">${money(q.serviceAmount)}</dd></div>
       </dl></div>`;
     cta = html`<button type="button" class="btn primary block" data-action="wizard-next">Continue</button>`;
   }
@@ -272,7 +272,7 @@ function bookView(mealId, query) {
     const today = R.startOfDay(now);
     const days = Array.from({ length: 12 }, (_, i) => today + i * R.DAY + 12 * R.HOUR);
     const suggested = demoDate(now);
-    body = html`<p class="muted">Foodie needs at least one day's notice, so your chef can be allocated and you can shop.</p>
+    body = html`<p class="muted">Dishit needs at least one day's notice, so your chef can be allocated and you can shop.</p>
       <div class="days" style="margin-top:16px" role="group" aria-label="Date">
         ${days.map((ms, i) => {
           const key = R.dateKey(ms);
@@ -322,7 +322,7 @@ function bookView(mealId, query) {
         <dt>Date</dt><dd>${dateLong(scheduledAt)}</dd>
         <dt>Chef arrives</dt><dd>${d.time}</dd>
         <dt>Where</dt><dd>${d.address.line1}, ${d.address.suburb}</dd>
-        <dt>Foodie service</dt><dd class="num">${money(q.serviceAmount)}</dd>
+        <dt>Dishit service</dt><dd class="num">${money(q.serviceAmount)}</dd>
         ${q.discount ? html`<dt>Late-chef discount (${q.discountPct}%)</dt><dd class="num">${money(-q.discount)}</dd>` : ''}
         <div class="total" style="display:contents"><dt>Total</dt><dd class="num" id="total">${money(q.total)}</dd></div>
       </dl></div>
@@ -360,10 +360,10 @@ function confirmedView(id) {
   if (!b || b.customerId !== S().session.customerId) return notFound('That booking could not be found', '#/bookings');
   return shell(html`<main class="screen"><div class="pad stack" style="text-align:center; padding-top:36px">
       <div class="plate" style="width:150px; margin:0 auto">${photo(b.image, '')}</div>
-      <h1>Your Foodie booking has been received!</h1>
+      <h1>Your Dishit booking has been received!</h1>
       <div><p class="muted small">Booking reference</p><p class="big-ref" id="booking-ref">${b.ref}</p></div>
       <p>${b.mealName} for ${b.servings}<br>${dateLong(b.scheduledAt)} at ${time(b.scheduledAt)}</p>
-      <div class="card mielie"><p class="strong">Finding your chef…</p><p class="small">Foodie is choosing the right chef for you. We will let you know as soon as they confirm.</p></div>
+      <div class="card mielie"><p class="strong">Finding your chef…</p><p class="small">Dishit is choosing the right chef for you. We will let you know as soon as they confirm.</p></div>
       <p class="small muted">Simulated payment of ${money(b.pricing.total)} approved (${b.payment.reference}).</p>
       <a class="btn block" href="#/booking/${b.id}">Track this booking</a>
       <a class="btn block quiet" href="#/home">Back to home</a>
@@ -379,7 +379,7 @@ function tracker(b) {
   const accepted = b.assignment.status === 'accepted' || at >= 1;
   const rows = [
     { title: 'Booking received and paid', meta: dateTime(b.createdAt), state: 'done' },
-    { title: accepted ? 'Chef confirmed' : 'Finding your chef', meta: accepted ? dateTime(b.assignment.respondedAt || b.createdAt) : 'Foodie is allocating a chef', state: accepted ? 'done' : closedBad ? '' : 'now' },
+    { title: accepted ? 'Chef confirmed' : 'Finding your chef', meta: accepted ? dateTime(b.assignment.respondedAt || b.createdAt) : 'Dishit is allocating a chef', state: accepted ? 'done' : closedBad ? '' : 'now' },
     { title: 'Ingredients confirmed', meta: b.ingredients.customerConfirmedAt ? dateTime(b.ingredients.customerConfirmedAt) : b.ingredients.status === 'listed' ? 'Waiting for you' : 'After your chef sends the list', state: b.ingredients.customerConfirmedAt ? 'done' : (!closedBad && b.ingredients.status === 'listed' && at <= 1 ? 'now' : '') },
     { title: 'Chef en route', meta: b.times.enRouteAt ? time(b.times.enRouteAt) : '', state: b.times.enRouteAt ? (b.status === 'en_route' ? 'now' : 'done') : '' },
     { title: 'Chef arrived', meta: b.times.arrivedAt ? `${time(b.times.arrivedAt)}${b.late.isLate ? `, ${b.late.minutesLate} min late` : ''}` : `Booked for ${time(b.scheduledAt)}`, state: b.times.arrivedAt ? (b.status === 'arrived' ? 'now' : 'done') : '' },
@@ -398,7 +398,7 @@ function nowCard(b) {
   const miss = b.ingredients.missing;
   if (b.status === 'cancelled') {
     const refunded = b.payment.refunds.reduce((s, r) => s + r.amount, 0);
-    return html`<div class="card chilli"><p class="strong">This booking was cancelled${b.cancellation.by === 'admin' ? ' by Foodie' : ''}</p><p class="small">${refunded ? `Refund: ${money(refunded)} (${b.cancellation.refundPct}%).` : 'No refund was due.'}</p></div>`;
+    return html`<div class="card chilli"><p class="strong">This booking was cancelled${b.cancellation.by === 'admin' ? ' by Dishit' : ''}</p><p class="small">${refunded ? `Refund: ${money(refunded)} (${b.cancellation.refundPct}%).` : 'No refund was due.'}</p></div>`;
   }
   if (b.status === 'customer_no_show') return html`<div class="card chilli"><p class="strong">We missed you</p><p class="small">Your chef waited ${R.POLICY.noShowWaitMin} minutes and could not reach you. This booking is not refundable.</p></div>`;
   if (b.status === 'ended_missing_ingredient') return html`<div class="card chilli"><p class="strong">Booking ended: ${miss.item} was missing</p><p class="small">It was not available within ${R.POLICY.missingIngredientWaitMin} minutes, so your chef left. Because you confirmed your ingredients, this booking is not refundable.</p></div>`;
@@ -408,20 +408,20 @@ function nowCard(b) {
     if (miss && miss.status === 'waiting') {
       return html`<div class="card chilli stack-s"><p class="strong">An essential ingredient is missing: ${miss.item}</p><p class="small">Your chef cannot cook this meal without it. Get it before the time runs out, or your chef may leave and the booking is not refundable.</p><p class="countdown" data-countdown="${R.missingIngredientDeadline(miss.flaggedAt)}">--:--</p></div>`;
     }
-    return html`<div class="card indigo stack-s"><p class="strong">Your Foodie Chef has arrived</p><p class="small muted">${first} marked arrived at ${time(b.times.arrivedAt)}.</p>
+    return html`<div class="card indigo stack-s"><p class="strong">Your Dishit Chef has arrived</p><p class="small muted">${first} marked arrived at ${time(b.times.arrivedAt)}.</p>
       ${b.times.customerArrivalConfirmedAt ? html`<p class="small">You confirmed this at ${time(b.times.customerArrivalConfirmedAt)}.</p>` : html`<button type="button" class="btn primary small" data-action="confirm-arrival" data-id="${b.id}">Confirm chef has arrived</button>`}
       ${miss && miss.status === 'noted' ? html`<p class="small">Cooking without ${miss.item}: the meal may turn out a little different.</p>` : ''}</div>`;
   }
   if (b.status === 'en_route') return html`<div class="card indigo"><p class="strong">${first} is on the way</p><p class="small muted">Left at ${time(b.times.enRouteAt)}. Booked to arrive at ${time(b.scheduledAt)}.</p></div>`;
   if (b.status === 'confirmed') {
-    if (b.ingredients.status === 'not_listed') return html`<div class="card indigo"><p class="strong">Your Foodie Chef has been confirmed!</p><p class="small muted">${first} is checking the ingredient list for your meal. You will get it shortly.</p></div>`;
+    if (b.ingredients.status === 'not_listed') return html`<div class="card indigo"><p class="strong">Your Dishit Chef has been confirmed!</p><p class="small muted">${first} is checking the ingredient list for your meal. You will get it shortly.</p></div>`;
     if (b.ingredients.status === 'listed') {
       const reminded = Boolean(b.ingredients.reminderSentAt);
-      return html`<div class="card mielie"><p class="strong">${reminded ? 'Your Foodie booking is coming up' : 'Your ingredient list is ready'}</p><p class="small">${reminded ? 'Please confirm that you have all the required ingredients ready for your chef.' : 'Tick what you already have, shop for the rest, then confirm below.'}</p></div>`;
+      return html`<div class="card mielie"><p class="strong">${reminded ? 'Your Dishit booking is coming up' : 'Your ingredient list is ready'}</p><p class="small">${reminded ? 'Please confirm that you have all the required ingredients ready for your chef.' : 'Tick what you already have, shop for the rest, then confirm below.'}</p></div>`;
     }
     return html`<div class="card leaf"><p class="strong">You are all set</p><p class="small">Ingredients confirmed. ${first} arrives ${dateShort(b.scheduledAt)} at ${time(b.scheduledAt)}.</p></div>`;
   }
-  return html`<div class="card mielie"><p class="strong">Finding your chef…</p><p class="small">${b.assignment.status === 'chef_cancelled' ? 'Your chef could no longer make it. Foodie is arranging a replacement.' : 'Foodie is choosing the right chef for your booking.'}</p></div>`;
+  return html`<div class="card mielie"><p class="strong">Finding your chef…</p><p class="small">${b.assignment.status === 'chef_cancelled' ? 'Your chef could no longer make it. Dishit is arranging a replacement.' : 'Dishit is choosing the right chef for your booking.'}</p></div>`;
 }
 
 function reviewCard(b) {
@@ -429,7 +429,7 @@ function reviewCard(b) {
   const starRow = (key, size = '') => html`<div class="star-input ${size}" role="group" aria-label="${key} rating">${[1, 2, 3, 4, 5].map((n) => html`<button type="button" class="${r[key] >= n ? 'on' : ''}" data-action="star" data-id="${b.id}" data-key="${key}" data-n="${n}" aria-label="${plural(n, 'star')}" aria-pressed="${String(r[key] === n)}">★</button>`)}</div>`;
   const small = (key, label) => html`<div class="row spread"><span class="small">${label}</span>${starRow(key, 'sm')}</div>`;
   return html`<div class="card stack" id="review-form">
-    <div><h3>How was your Foodie experience?</h3><p class="small muted">Your review goes to Foodie and your chef.</p></div>
+    <div><h3>How was your Dishit experience?</h3><p class="small muted">Your review goes to Dishit and your chef.</p></div>
     ${starRow('overall')}
     <div class="stack-s">${small('food', 'Food quality')}${small('professionalism', 'Chef professionalism')}${small('punctuality', 'Punctuality')}${small('cleanliness', 'Cleanliness')}</div>
     <label class="field"><span>Anything to add? (optional)</span><textarea class="input" id="review-comment" maxlength="600" data-input="review-comment" data-id="${b.id}">${r.comment}</textarea></label>
@@ -467,17 +467,17 @@ function bookingView(id) {
     <main class="screen"><div class="pad stack">
       <div class="row top">${photo(b.image, '', 'thumb')}<div class="grow"><h2>${b.mealName}</h2><p class="small muted">${dateLong(b.scheduledAt)} at ${time(b.scheduledAt)}, ${plural(b.servings, 'person', 'people')}</p></div></div>
       ${nowCard(b)}
-      ${chef ? html`<div class="card row"><div class="avatar">${initials(chef.name)}</div><div class="grow"><p class="small muted">Your Foodie chef</p><p class="strong">${chef.name}</p><p class="small">${stars(chef.rating)} ${chef.rating.toFixed(1)} from ${chef.ratingCount} reviews</p><p class="small muted">${chef.qualification} (NQF ${chef.nqfLevel}), ${chef.years} years cooking</p></div></div>` : ''}
+      ${chef ? html`<div class="card row"><div class="avatar">${initials(chef.name)}</div><div class="grow"><p class="small muted">Your Dishit chef</p><p class="strong">${chef.name}</p><p class="small">${stars(chef.rating)} ${chef.rating.toFixed(1)} from ${chef.ratingCount} reviews</p><p class="small muted">${chef.qualification} (NQF ${chef.nqfLevel}), ${chef.years} years cooking</p></div></div>` : ''}
       ${ingredientsCard(b)}
       <div><h3 style="margin-bottom:12px">Progress</h3>${tracker(b)}</div>
       <div class="card"><h3 style="margin-bottom:10px">Payment</h3><dl class="kv">
-        <dt>Foodie service</dt><dd class="num">${money(s.serviceAmount)}</dd>
+        <dt>Dishit service</dt><dd class="num">${money(s.serviceAmount)}</dd>
         ${s.discount ? html`<dt>Late-chef discount</dt><dd class="num">${money(-s.discount)}</dd>` : ''}
         <dt>Paid (${b.payment.method.toLowerCase()})</dt><dd class="num">${money(s.paid)}</dd>
         ${b.payment.refunds.map((r) => html`<dt>Refund${r.pct ? ` ${r.pct}%` : ''} (${r.status === 'processed' ? 'processed' : 'being processed'})</dt><dd class="num">${money(-r.amount)}</dd>`)}
       </dl><p class="demo-note" style="margin-top:8px">Simulated payment ${b.payment.reference}. No real money moved.</p></div>
       <div class="card flat small"><p class="strong">Where</p><p>${b.address.line1}, ${b.address.suburb}, ${b.address.city}, ${b.address.postalCode}</p>${b.address.directions ? html`<p class="muted">${b.address.directions}</p>` : ''}${b.noteToChef ? html`<p style="margin-top:6px"><strong>Your note to the chef:</strong> ${b.noteToChef}</p>` : ''}</div>
-      ${b.late.isLate ? html`<div class="card mielie small"><strong>Your chef was ${b.late.minutesLate} minutes late.</strong> You get ${R.POLICY.lateDiscountPct}% off your next Foodie, applied automatically.</div>` : ''}
+      ${b.late.isLate ? html`<div class="card mielie small"><strong>Your chef was ${b.late.minutesLate} minutes late.</strong> You get ${R.POLICY.lateDiscountPct}% off your next Dishit, applied automatically.</div>` : ''}
       ${R.FINISHED_STATUSES.includes(b.status) || b.status === 'cancelled' ? html`<a class="btn block ghost" href="#/book/${b.mealId}?n=${b.servings}">Order again</a>` : ''}
       ${R.isOpen(b.status) ? (cancel.allowed
         ? html`<button type="button" class="btn danger block" data-action="open-cancel" data-id="${b.id}">Cancel booking</button>`
@@ -523,7 +523,7 @@ function bookingsView() {
   };
   const list = groups[bookingsTab];
   const empties = { upcoming: 'Nothing booked yet', active: 'No chef is cooking for you right now', completed: 'No completed bookings yet', cancelled: 'No cancelled bookings' };
-  return shell(html`${topbar('My Foodie')}
+  return shell(html`${topbar('My Dishit')}
     <main class="screen"><div class="pad stack">
       <div class="tabset" role="tablist">${Object.keys(groups).map((k) => html`<button type="button" role="tab" data-action="bookings-tab" data-tab="${k}" aria-selected="${String(bookingsTab === k)}">${k[0].toUpperCase() + k.slice(1)}${groups[k].length ? ` (${groups[k].length})` : ''}</button>`)}</div>
       ${list.length ? list.map((b) => {
@@ -534,7 +534,7 @@ function bookingsView() {
             <p class="small muted">${dateShort(b.scheduledAt)} at ${time(b.scheduledAt)}, ${plural(b.servings, 'person', 'people')}, ${money(b.pricing.total)}</p>
             <p class="small muted">${chef ? `Chef ${chef.name}` : 'Chef not confirmed yet'}${b.review ? html`, ${stars(b.review.overall)}` : b.status === 'completed' ? ', review to leave' : ''}</p></div>
         </a>`;
-      }) : html`<div class="empty"><h3>${empties[bookingsTab]}</h3><p>Choose a meal and Foodie will bring the chef.</p><p style="margin-top:12px"><a class="btn small primary" href="#/home">Browse meals</a></p></div>`}
+      }) : html`<div class="empty"><h3>${empties[bookingsTab]}</h3><p>Choose a meal and Dishit will bring the chef.</p><p style="margin-top:12px"><a class="btn small primary" href="#/home">Browse meals</a></p></div>`}
     </div></main>`);
 }
 
@@ -571,7 +571,7 @@ function infoView(slug) {
     : page.body.map((p) => html`<p>${p}</p>`);
   return html`${ribbon()}${topbar(page.title, back)}
     <main class="screen"><div class="pad stack">${body}
-      ${page.placeholder ? html`<p class="demo-note">Placeholder text for the demonstration. The final wording must come from Foodie and its legal advisers.</p>` : ''}
+      ${page.placeholder ? html`<p class="demo-note">Placeholder text for the demonstration. The final wording must come from Dishit and its legal advisers.</p>` : ''}
     </div></main>${S().session.customerId ? tabBar() : ''}${demoPanel()}`;
 }
 
@@ -629,7 +629,7 @@ const actions = {
   verify: () => {
     const r = store.verifyEmail(forms.verifyCode);
     forms.message = r.ok ? '' : r.error;
-    if (r.ok) { toast('Email verified. Welcome to Foodie.', 'good'); go('#/home'); } else rerender();
+    if (r.ok) { toast('Email verified. Welcome to Dishit.', 'good'); go('#/home'); } else rerender();
   },
   logout: () => { store.logoutCustomer(); draft = null; go('#/welcome'); },
 

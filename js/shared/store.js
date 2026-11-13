@@ -6,7 +6,7 @@
 import * as R from './rules.js';
 import { baseState, seedHistory } from './seed.js';
 
-export const STORAGE_KEY = 'foodie.demo.state.v1';
+export const STORAGE_KEY = 'dishit.demo.state.v1';
 export const DEMO_VERIFY_CODE = '246810';
 
 const ok = (extra = {}) => ({ ok: true, ...extra });
@@ -35,7 +35,7 @@ export function createStore({ storage, realNow = () => Date.now() } = {}) {
     try {
       storage.setItem(STORAGE_KEY, JSON.stringify(state));
     } catch (err) {
-      console.error('Foodie demo: could not save state', err);
+      console.error('Dishit demo: could not save state', err);
     }
   }
 
@@ -161,7 +161,7 @@ export function createStore({ storage, realNow = () => Date.now() } = {}) {
       const confirmed = b.ingredients.status === R.INGREDIENTS.CONFIRMED;
       notify(
         `customer:${b.customerId}`,
-        'Your Foodie booking is coming up',
+        'Your Dishit booking is coming up',
         confirmed
           ? 'Your chef arrives in about two hours. Your ingredients are confirmed.'
           : 'Please confirm that you have all the required ingredients ready for your chef.',
@@ -219,15 +219,15 @@ export function createStore({ storage, realNow = () => Date.now() } = {}) {
     c.emailVerified = true;
     state.session.pendingVerificationId = null;
     state.session.customerId = c.id;
-    notify(`customer:${c.id}`, 'Welcome to Foodie', 'Your email is verified. You choose the food, we bring the chef.');
+    notify(`customer:${c.id}`, 'Welcome to Dishit', 'Your email is verified. You choose the food, we bring the chef.');
     return commit(ok({ customerId: c.id }));
   };
 
   api.loginCustomer = (email, password) => {
     fresh();
     const c = state.customers.find((x) => x.email === String(email || '').trim().toLowerCase());
-    if (!c || String(password || '').length < 8) return fail('That email and password do not match a Foodie account.');
-    if (c.status !== 'active') return fail('This account is suspended. Contact Foodie support.');
+    if (!c || String(password || '').length < 8) return fail('That email and password do not match a Dishit account.');
+    if (c.status !== 'active') return fail('This account is suspended. Contact Dishit support.');
     if (!c.emailVerified) {
       state.session.pendingVerificationId = c.id;
       return commit(fail('Verify your email address first.', { needsVerification: true }));
@@ -270,7 +270,7 @@ export function createStore({ storage, realNow = () => Date.now() } = {}) {
     fresh();
     const c = customer(input.customerId);
     if (!c) return fail('Log in to make a booking.');
-    if (c.status !== 'active') return fail('This account is suspended. Contact Foodie support.');
+    if (c.status !== 'active') return fail('This account is suspended. Contact Dishit support.');
     if (!c.emailVerified) return fail('Verify your email address before booking.');
     const m = meal(input.mealId);
     if (!m || !m.active || !category(m.categoryId) || !category(m.categoryId).active) return fail('This meal is not available right now.');
@@ -303,7 +303,7 @@ export function createStore({ storage, realNow = () => Date.now() } = {}) {
     };
     const b = {
       id: `b${n}`,
-      ref: `FD-${String(20417 + n * 263).padStart(5, '0')}`,
+      ref: `DS-${String(20417 + n * 263).padStart(5, '0')}`,
       customerId: c.id,
       mealId: m.id,
       mealName: m.name,
@@ -337,7 +337,7 @@ export function createStore({ storage, realNow = () => Date.now() } = {}) {
     state.bookings.unshift(b);
     event(b, 'customer', 'booked', `${c.firstName} booked ${m.name} for ${q.servings} people.`);
     event(b, 'system', 'payment', `Simulated payment of ${R.money(q.total)} approved (${b.payment.reference}).${q.discount ? ` Late-chef discount of ${R.money(q.discount)} applied automatically.` : ''}`);
-    notify(`customer:${c.id}`, 'Your Foodie booking has been received!', `${m.name} for ${q.servings}. Reference ${b.ref}. We are finding your chef.`, b.id);
+    notify(`customer:${c.id}`, 'Your Dishit booking has been received!', `${m.name} for ${q.servings}. Reference ${b.ref}. We are finding your chef.`, b.id);
     notify('admin', 'New booking to allocate', `${b.ref}: ${m.name} for ${q.servings} in ${address.suburb}.`, b.id);
     return commit(ok({ bookingId: b.id, ref: b.ref }));
   };
@@ -448,7 +448,7 @@ export function createStore({ storage, realNow = () => Date.now() } = {}) {
     if (hadChef && current === chefId) return fail(`${ch.name} already has this booking.`);
     if (hadChef) {
       b.assignment.history.push({ chefId: current, at: now(), outcome: 'withdrawn' });
-      notify(`chef:${current}`, 'Booking reassigned', `${b.ref} has been given to another chef by Foodie.`, b.id);
+      notify(`chef:${current}`, 'Booking reassigned', `${b.ref} has been given to another chef by Dishit.`, b.id);
       resetIngredients(b);
     }
     const wasConfirmed = b.status === R.BOOKING.CONFIRMED;
@@ -460,7 +460,7 @@ export function createStore({ storage, realNow = () => Date.now() } = {}) {
     b.status = R.BOOKING.AWAITING_CHEF;
     event(b, 'admin', hadChef ? 'reallocated' : 'allocated', `Admin ${hadChef ? 'reallocated the booking to' : 'allocated'} ${ch.name}. Waiting for the chef to respond.`);
     notify(`chef:${chefId}`, 'New booking request', `${b.mealName} for ${b.servings} in ${b.address.suburb}. Accept or decline.`, b.id);
-    if (wasConfirmed) notify(`customer:${b.customerId}`, 'Your chef is changing', `${b.ref}: Foodie is confirming a new chef for you.`, b.id);
+    if (wasConfirmed) notify(`customer:${b.customerId}`, 'Your chef is changing', `${b.ref}: Dishit is confirming a new chef for you.`, b.id);
     return commit(ok());
   };
 
@@ -476,7 +476,7 @@ export function createStore({ storage, realNow = () => Date.now() } = {}) {
       b.assignment.history.push({ chefId, at: now(), outcome: 'accepted' });
       b.status = R.BOOKING.CONFIRMED;
       event(b, 'chef', 'accepted', `${ch.name} accepted the booking.`);
-      notify(`customer:${b.customerId}`, 'Your Foodie Chef has been confirmed!', `${ch.name} will cook your ${b.mealName}.`, b.id);
+      notify(`customer:${b.customerId}`, 'Your Dishit Chef has been confirmed!', `${ch.name} will cook your ${b.mealName}.`, b.id);
       notify('admin', 'Chef accepted', `${b.ref}: ${ch.name} accepted.`, b.id);
     } else {
       b.assignment.status = R.ASSIGNMENT.DECLINED;
@@ -493,7 +493,7 @@ export function createStore({ storage, realNow = () => Date.now() } = {}) {
     const { b, error } = guardBooking(bookingId);
     if (error) return error;
     if (b.assignment.status !== R.ASSIGNMENT.ACCEPTED || b.assignment.chefId !== chefId) return fail('This booking is not yours to cancel.');
-    if (![R.BOOKING.CONFIRMED, R.BOOKING.EN_ROUTE].includes(b.status)) return fail('This booking can no longer be handed back. Contact Foodie support.');
+    if (![R.BOOKING.CONFIRMED, R.BOOKING.EN_ROUTE].includes(b.status)) return fail('This booking can no longer be handed back. Contact Dishit support.');
     const ch = chef(chefId);
     b.assignment.status = R.ASSIGNMENT.CHEF_CANCELLED;
     b.assignment.chefId = null;
@@ -502,10 +502,10 @@ export function createStore({ storage, realNow = () => Date.now() } = {}) {
     b.times.enRouteAt = null;
     resetIngredients(b);
     ch.stats.cancellations += 1; // BRIEF §29: recorded against the chef's profile.
-    event(b, 'chef', 'chef_cancelled', `${ch.name} cancelled after accepting${reason ? `: ${String(reason).trim()}` : '.'} Foodie is looking for a replacement.`);
+    event(b, 'chef', 'chef_cancelled', `${ch.name} cancelled after accepting${reason ? `: ${String(reason).trim()}` : '.'} Dishit is looking for a replacement.`);
     incident(b.id, 'chef_cancelled', 'high', `${ch.name} cancelled ${b.ref} after accepting. Find a replacement or refund 100%.`);
     notify('admin', 'Chef cancelled: replacement needed', `${b.ref}: ${ch.name} cancelled after accepting.`, b.id);
-    notify(`customer:${b.customerId}`, 'We are finding you a new chef', `${b.ref}: your chef can no longer make it. Foodie is arranging a replacement.`, b.id);
+    notify(`customer:${b.customerId}`, 'We are finding you a new chef', `${b.ref}: your chef can no longer make it. Dishit is arranging a replacement.`, b.id);
     return commit(ok());
   };
 
@@ -554,14 +554,14 @@ export function createStore({ storage, realNow = () => Date.now() } = {}) {
       b.times.arrivedAt = t;
       b.late = R.lateness(b.scheduledAt, t);
       event(b, 'chef', 'arrived', `${ch.name} marked "I have arrived" at ${R.timeKey(t)}${b.late.minutesLate ? ` (${b.late.minutesLate} min after the booked time)` : ''}. This is the official arrival record.`);
-      notify(`customer:${b.customerId}`, 'Your Foodie Chef has arrived', `${ch.name} is at your door.`, b.id);
+      notify(`customer:${b.customerId}`, 'Your Dishit Chef has arrived', `${ch.name} is at your door.`, b.id);
       if (b.late.isLate) {
         const c = customer(b.customerId);
         // BRIEF §30: automatic, no coupon, applies to the next booking only.
         c.discount = { pct: R.POLICY.lateDiscountPct, fromBookingId: b.id, grantedAt: t };
         ch.stats.lateArrivals += 1;
-        event(b, 'system', 'late', `Chef was more than ${R.POLICY.lateThresholdMin} minutes late. Split changes to 70% chef / 30% Foodie. Customer gets ${R.POLICY.lateDiscountPct}% off their next booking.`);
-        notify(`customer:${b.customerId}`, `${R.POLICY.lateDiscountPct}% off your next Foodie`, 'Your chef arrived more than 30 minutes late. The discount is applied automatically to your next booking.', b.id);
+        event(b, 'system', 'late', `Chef was more than ${R.POLICY.lateThresholdMin} minutes late. Split changes to 70% chef / 30% Dishit. Customer gets ${R.POLICY.lateDiscountPct}% off their next booking.`);
+        notify(`customer:${b.customerId}`, `${R.POLICY.lateDiscountPct}% off your next Dishit`, 'Your chef arrived more than 30 minutes late. The discount is applied automatically to your next booking.', b.id);
         notify(`chef:${chefId}`, 'Late arrival recorded', `${b.ref}: you arrived ${b.late.minutesLate} minutes late. This booking pays 70%.`, b.id);
         incident(b.id, 'chef_late', 'medium', `${ch.name} arrived ${b.late.minutesLate} min late for ${b.ref}. 70/30 split applied, customer given 10% off next booking.`);
       }
@@ -582,8 +582,8 @@ export function createStore({ storage, realNow = () => Date.now() } = {}) {
       ch.stats.completed += 1;
       const s = R.settle(b);
       event(b, 'chef', 'completed', `${ch.name} completed the booking.`);
-      event(b, 'system', 'earnings', `Earnings recorded: chef ${R.money(s.chefAmount)} (${s.chefPct}%), Foodie ${R.money(s.foodieAmount)}. Chef payout scheduled for ${R.dateKey(b.payout.payoutDate)}.`);
-      notify(`customer:${b.customerId}`, 'How was your Foodie experience?', `Rate your ${b.mealName} with ${ch.name}.`, b.id);
+      event(b, 'system', 'earnings', `Earnings recorded: chef ${R.money(s.chefAmount)} (${s.chefPct}%), Dishit ${R.money(s.foodieAmount)}. Chef payout scheduled for ${R.dateKey(b.payout.payoutDate)}.`);
+      notify(`customer:${b.customerId}`, 'How was your Dishit experience?', `Rate your ${b.mealName} with ${ch.name}.`, b.id);
       notify(`chef:${chefId}`, 'Earnings recorded', `${b.ref}: ${R.money(s.chefAmount)} will be paid on ${R.dateKey(b.payout.payoutDate)}.`, b.id);
       notify('admin', 'Booking completed', `${b.ref} completed by ${ch.name}.`, b.id);
       return commit(ok());
@@ -676,12 +676,12 @@ export function createStore({ storage, realNow = () => Date.now() } = {}) {
     b.cancellation = { by: 'admin', at: now(), rule: 'foodie_cancelled', refundPct: 100, reason: String(reason).trim(), chefHadAccepted: false };
     b.status = R.BOOKING.CANCELLED;
     b.times.closedAt = now();
-    refund(b, b.pricing.total, { pct: 100, rule: 'foodie_cancelled', reason: reason ? `Foodie cancelled: ${String(reason).trim()}` : 'Foodie cancelled the booking', by: 'admin' });
+    refund(b, b.pricing.total, { pct: 100, rule: 'foodie_cancelled', reason: reason ? `Dishit cancelled: ${String(reason).trim()}` : 'Dishit cancelled the booking', by: 'admin' });
     scheduleEarnings(b, null);
     restoreDiscountIfFullyRefunded(b);
-    if (chefId) notify(`chef:${chefId}`, 'Booking cancelled by Foodie', `${b.ref} has been cancelled.`, b.id);
+    if (chefId) notify(`chef:${chefId}`, 'Booking cancelled by Dishit', `${b.ref} has been cancelled.`, b.id);
     event(b, 'admin', 'cancelled', `Admin cancelled the booking${reason ? `: ${String(reason).trim()}` : '.'} 100% refund of ${R.money(b.pricing.total)}.`);
-    notify(`customer:${b.customerId}`, 'Your booking was cancelled by Foodie', `${b.ref}: you will be refunded ${R.money(b.pricing.total)} in full.`, b.id);
+    notify(`customer:${b.customerId}`, 'Your booking was cancelled by Dishit', `${b.ref}: you will be refunded ${R.money(b.pricing.total)} in full.`, b.id);
     return commit(ok());
   };
 
@@ -706,7 +706,7 @@ export function createStore({ storage, realNow = () => Date.now() } = {}) {
     const max = R.maxGoodwillRefund(b);
     const amount = Math.round(Number(amountCents));
     if (!(amount > 0)) return fail('Enter a refund amount.');
-    if (amount > max) return fail(max > 0 ? `The most that can be refunded here is ${R.money(max)}, which is Foodie's share. The chef's earnings are not touched.` : 'There is nothing left to refund on this booking.');
+    if (amount > max) return fail(max > 0 ? `The most that can be refunded here is ${R.money(max)}, which is Dishit's share. The chef's earnings are not touched.` : 'There is nothing left to refund on this booking.');
     if (!String(reason).trim()) return fail('Give a reason for the refund.');
     refund(b, amount, { rule: 'goodwill', reason: String(reason).trim(), by: 'admin' });
     event(b, 'admin', 'goodwill_refund', `Admin issued a goodwill refund of ${R.money(amount)}: ${String(reason).trim()}`);
@@ -721,7 +721,7 @@ export function createStore({ storage, realNow = () => Date.now() } = {}) {
     if (!text) return fail('Write a message first.');
     const to = who === 'chef' ? (b.assignment.chefId ? `chef:${b.assignment.chefId}` : null) : `customer:${b.customerId}`;
     if (!to) return fail('No chef is allocated to this booking.');
-    notify(to, 'Message from Foodie support', text, b.id);
+    notify(to, 'Message from Dishit support', text, b.id);
     event(b, 'admin', 'contact', `Admin messaged the ${who === 'chef' ? 'chef' : 'customer'} in the app: "${text}"`);
     return commit(ok());
   };
@@ -738,7 +738,7 @@ export function createStore({ storage, realNow = () => Date.now() } = {}) {
     }
     ch.statusHistory.push({ at: now(), from: ch.status, to: status, reason: String(reason).trim() });
     ch.status = status;
-    if (status === 'approved') notify(`chef:${chefId}`, 'You are approved to cook with Foodie', 'You can now receive booking requests.');
+    if (status === 'approved') notify(`chef:${chefId}`, 'You are approved to cook with Dishit', 'You can now receive booking requests.');
     return commit(ok());
   };
 

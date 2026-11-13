@@ -1,4 +1,4 @@
-// Foodie business rules — the single source of truth for every price, refund,
+// Dishit business rules — the single source of truth for every price, refund,
 // split, lateness and payout calculation in the demo. Pure functions only:
 // no storage, no DOM, no clock. All money is integer cents. All times are ms.
 //
@@ -148,7 +148,7 @@ export function servicePrice(meal, servings) {
 }
 
 /**
- * Checkout quote. The late-chef discount (BRIEF §30) applies to the Foodie
+ * Checkout quote. The late-chef discount (BRIEF §30) applies to the Dishit
  * service amount and is applied automatically when the customer has one.
  */
 export function quote(meal, servings, discountPct = 0) {
@@ -208,7 +208,7 @@ export function validateSchedule(date, time, now) {
   const scheduledAt = toTimestamp(date, time);
   if (Number.isNaN(scheduledAt)) return { ok: false, error: 'Choose a date and an arrival time.' };
   if (startOfDay(scheduledAt) <= startOfDay(now)) {
-    return { ok: false, error: 'Foodie needs at least one day’s notice. Choose tomorrow or later.' };
+    return { ok: false, error: 'Dishit needs at least one day’s notice. Choose tomorrow or later.' };
   }
   if (!timeSlots().includes(time)) {
     return { ok: false, error: `Chefs arrive between ${POLICY.firstSlot} and ${POLICY.lastSlot}.` };
@@ -235,7 +235,7 @@ export function cancellationRule(status, scheduledAt, now) {
   }
   if (status === BOOKING.ARRIVED || status === BOOKING.COOKING) {
     // ASSUMPTION T1: the brief stops at "started travelling".
-    return { allowed: false, refundPct: 0, rule: 'chef_on_site', label: 'Your chef is already with you', reason: 'Your chef has arrived, so this booking can no longer be cancelled in the app. Contact Foodie support.' };
+    return { allowed: false, refundPct: 0, rule: 'chef_on_site', label: 'Your chef is already with you', reason: 'Your chef has arrived, so this booking can no longer be cancelled in the app. Contact Dishit support.' };
   }
   return { allowed: false, refundPct: 0, rule: 'closed', label: 'Booking is closed', reason: 'This booking is already closed.' };
 }
@@ -292,7 +292,7 @@ export function settle(booking) {
 
   if (FINISHED_STATUSES.includes(booking.status)) {
     // BRIEF §22, §25, §27, §30, §35. ASSUMPTION T3: late beats no-show.
-    // ASSUMPTION M3: the chef is paid on the full service amount, so Foodie
+    // ASSUMPTION M3: the chef is paid on the full service amount, so Dishit
     // carries any late-chef discount the customer used on this booking.
     const chefPct = isLate ? POLICY.lateChefPct : POLICY.standardChefPct;
     const chefAmount = pct(serviceAmount, chefPct);
@@ -300,7 +300,7 @@ export function settle(booking) {
       ...base,
       final: true,
       rule: isLate ? 'late' : 'standard',
-      ruleLabel: isLate ? 'Late chef: 70% chef / 30% Foodie' : 'Standard: 80% chef / 20% Foodie',
+      ruleLabel: isLate ? 'Late chef: 70% chef / 30% Dishit' : 'Standard: 80% chef / 20% Dishit',
       chefPct,
       foodiePct: 100 - chefPct,
       chefAmount,
@@ -317,7 +317,7 @@ export function settle(booking) {
       ...base,
       final: true,
       rule: 'cancelled',
-      ruleLabel: retained === 0 ? 'Cancelled: fully refunded' : chefHadAccepted ? 'Cancelled: amount kept is split 80% chef / 20% Foodie' : 'Cancelled: no chef had accepted, Foodie keeps the amount not refunded',
+      ruleLabel: retained === 0 ? 'Cancelled: fully refunded' : chefHadAccepted ? 'Cancelled: amount kept is split 80% chef / 20% Dishit' : 'Cancelled: no chef had accepted, Dishit keeps the amount not refunded',
       chefPct: chefHadAccepted && retained > 0 ? POLICY.standardChefPct : 0,
       foodiePct: chefHadAccepted && retained > 0 ? 100 - POLICY.standardChefPct : retained > 0 ? 100 : 0,
       chefAmount,
@@ -333,7 +333,7 @@ export function settle(booking) {
     ...base,
     final: false,
     rule: isLate ? 'late' : 'standard',
-    ruleLabel: isLate ? 'Late chef: 70% chef / 30% Foodie (estimate)' : 'Standard: 80% chef / 20% Foodie (estimate)',
+    ruleLabel: isLate ? 'Late chef: 70% chef / 30% Dishit (estimate)' : 'Standard: 80% chef / 20% Dishit (estimate)',
     chefPct,
     foodiePct: 100 - chefPct,
     chefAmount,
@@ -417,7 +417,7 @@ export function payoutBatches(bookings, paidBatches = {}) {
 
 /** Totals across bookings for the admin revenue view. */
 export function revenueSummary(bookings) {
-  const out = { gross: 0, refunded: 0, retained: 0, chef: 0, foodie: 0, discounts: 0, standardCount: 0, lateCount: 0, cancelledCount: 0, openCount: 0, estimatedChef: 0, estimatedFoodie: 0 };
+  const out = { gross: 0, refunded: 0, retained: 0, chef: 0, foodie: 0, discounts: 0, standardCount: 0, lateCount: 0, cancelledCount: 0, openCount: 0, estimatedChef: 0, estimatedDishit: 0 };
   for (const b of bookings) {
     const s = settle(b);
     out.gross += s.paid;
@@ -433,7 +433,7 @@ export function revenueSummary(bookings) {
     } else {
       out.openCount += 1;
       out.estimatedChef += s.chefAmount;
-      out.estimatedFoodie += s.foodieAmount;
+      out.estimatedDishit += s.foodieAmount;
     }
   }
   return out;

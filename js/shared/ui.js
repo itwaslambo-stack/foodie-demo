@@ -7,7 +7,7 @@ import { createStore } from './store.js';
 // ------------------------------------------------------------------ store
 
 export const store = createStore({ storage: window.localStorage });
-window.addEventListener('storage', (e) => { if (e.key === null || e.key.startsWith('foodie.')) store.reload(); });
+window.addEventListener('storage', (e) => { if (e.key === null || e.key.startsWith('dishit.')) store.reload(); });
 // Time-driven work (the two-hour reminder) is checked by whichever screen is open.
 setInterval(() => { if (!document.hidden) store.tick(); }, 5000);
 

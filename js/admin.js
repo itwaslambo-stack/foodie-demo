@@ -1,4 +1,4 @@
-// Foodie admin dashboard (demo). Operations, manual chef allocation, menu,
+// Dishit admin dashboard (demo). Operations, manual chef allocation, menu,
 // money and support. Every figure is read from rules.js via the shared store.
 
 import * as R from './shared/rules.js';
@@ -36,10 +36,10 @@ function shell(section, body) {
   const counts = { bookings: needsChef().length, chefs: applications().length, payments: pendingRefunds().length, support: openIncidents().length };
   return html`<div class="admin-shell">
     <aside class="side">
-      <div class="wordmark">foodie<span>.</span></div>
+      <img class="logo" src="assets/img/brand/logo-dark.png" alt="Dishit" width="1017" height="411">
       <p class="role">Admin dashboard</p>
       <nav aria-label="Admin sections">${NAV.map(([key, label]) => html`<a href="#/${key}" aria-current="${section === key ? 'page' : 'false'}">${label}${counts[key] ? html`<span class="count">${counts[key]}</span>` : ''}</a>`)}</nav>
-      <div class="foot"><p>Demonstration. Fictional people, simulated money.</p><p style="margin-top:6px"><a href="index.html" style="color:#fff">Back to the demo hub</a></p></div>
+      <div class="foot"><p>Demonstration. Fictional people, simulated money.</p><p style="margin-top:6px"><a href="index.html" style="color:var(--on-deep)">Back to the demo hub</a></p></div>
     </aside>
     <div class="main">
       ${ribbon('Admin dashboard, sample data')}
@@ -93,7 +93,7 @@ function overviewView() {
     <div class="cols">
       ${figure(needsChef().length, 'Bookings needing a chef', 'c3', 'fig-needs-chef')}
       ${figure(today.length, 'Happening today')}
-      ${figure(money(sum.foodie), 'Foodie earnings, closed bookings')}
+      ${figure(money(sum.foodie), 'Dishit earnings, closed bookings')}
       ${figure(money(owed), 'Owed to chefs at next payouts')}
       <div class="panel c7"><h2>Needs attention</h2>
         ${attention.length ? html`<ul class="list">${attention.map((a) => html`<li><a href="${a.href}" id="${a.id || ''}" style="text-decoration:none; color:inherit" class="row grow"><span class="chip ${a.tone}">${a.label}</span><span class="grow">${a.text}</span></a></li>`)}</ul>` : html`<p class="muted">Nothing is waiting on you.</p>`}
@@ -159,25 +159,25 @@ function moneyPanel(b) {
   return html`<div class="panel c5" id="money"><h2>Money</h2>
     <div class="split-bar" aria-hidden="true">
       ${s.chefAmount > 0 ? html`<span class="chef" style="width:${(s.chefAmount / total) * 100}%">Chef ${money(s.chefAmount)}</span>` : ''}
-      ${s.foodieAmount > 0 ? html`<span class="foodie" style="width:${(s.foodieAmount / total) * 100}%">Foodie ${money(s.foodieAmount)}</span>` : ''}
+      ${s.foodieAmount > 0 ? html`<span class="foodie" style="width:${(s.foodieAmount / total) * 100}%">Dishit ${money(s.foodieAmount)}</span>` : ''}
       ${s.refunded > 0 ? html`<span class="refund" style="width:${(s.refunded / total) * 100}%">Refund ${money(s.refunded)}</span>` : ''}
     </div>
     <dl class="kv" style="margin-top:14px">
-      <dt>Foodie service amount</dt><dd class="num">${money(s.serviceAmount)}</dd>
+      <dt>Dishit service amount</dt><dd class="num">${money(s.serviceAmount)}</dd>
       ${s.discount ? html`<dt>Late-chef discount used</dt><dd class="num">${money(-s.discount)}</dd>` : ''}
       <dt>Paid by customer</dt><dd class="num" id="m-paid">${money(s.paid)}</dd>
       ${s.refunded ? html`<dt>Refunded</dt><dd class="num">${money(-s.refunded)}</dd>` : ''}
       <dt>Rule</dt><dd id="m-rule">${s.ruleLabel}</dd>
       ${s.lateAdjustment ? html`<dt>Late adjustment to chef</dt><dd class="num">${money(s.lateAdjustment)}</dd>` : ''}
       <dt>Chef earnings${s.final ? '' : ' (estimate)'}</dt><dd class="num" id="m-chef">${money(s.chefAmount)}</dd>
-      <dt>Foodie earnings${s.final ? '' : ' (estimate)'}</dt><dd class="num" id="m-foodie">${money(s.foodieAmount)}</dd>
+      <dt>Dishit earnings${s.final ? '' : ' (estimate)'}</dt><dd class="num" id="m-foodie">${money(s.foodieAmount)}</dd>
       <dt>Chef payout</dt><dd id="m-payout">${b.payout.status === 'none' ? 'Nothing due yet' : `${R.LABELS.payout[b.payout.status]}, ${dateShort(b.payout.payoutDate)}`}</dd>
     </dl>
     <p class="demo-note" style="margin-top:8px">${b.payment.method}, ${b.payment.reference}, ${dateTime(b.payment.paidAt)}. No real money moved.</p>
     ${b.payment.refunds.length ? html`<h3 style="margin:14px 0 4px; font-size:16px">Refunds</h3><ul class="list">${b.payment.refunds.map((r) => html`<li><span><span class="strong num">${money(r.amount)}</span> ${chip('refund', r.status)}<br><span class="small muted">${r.reason}</span></span>
       ${r.status === 'pending' ? html`<button type="button" class="btn small" data-action="process-refund" data-id="${b.id}" data-refund="${r.id}">Process refund</button>` : html`<span class="small muted">${dateTime(r.processedAt)}</span>`}</li>`)}</ul>` : ''}
     ${maxGoodwill > 0 ? html`<details class="more" id="d-goodwill" style="margin-top:10px"><summary>Give a goodwill refund</summary>
-      <p class="small muted">Up to ${money(maxGoodwill)}, taken from Foodie's share. The chef's earnings are not touched.</p>
+      <p class="small muted">Up to ${money(maxGoodwill)}, taken from Dishit's share. The chef's earnings are not touched.</p>
       <div class="row"><input class="input" id="gw-amount" inputmode="decimal" placeholder="Amount in rand" value="${forms.goodwill.amount}" data-input="form" data-form="goodwill" data-key="amount" aria-label="Refund amount in rand" style="max-width:150px">
         <input class="input grow" id="gw-reason" placeholder="Reason" value="${forms.goodwill.reason}" data-input="form" data-form="goodwill" data-key="reason" aria-label="Reason"></div>
       <button type="button" class="btn small" data-action="goodwill" data-id="${b.id}">Add refund</button></details>` : ''}
@@ -202,7 +202,7 @@ function bookingView(id) {
       <div><div class="l">Chef payout</div>${chip('payout', b.payout.status)}</div>
     </div>
     ${warn ? html`<div class="card mielie small" style="margin-bottom:16px"><strong>Less than two hours to go and the customer has not confirmed ingredients.</strong> The reminder was sent ${b.ingredients.reminderSentAt ? dateTime(b.ingredients.reminderSentAt) : 'automatically'}.</div>` : ''}
-    ${b.late.isLate ? html`<div class="card chilli small" style="margin-bottom:16px"><strong>Chef arrived ${b.late.minutesLate} minutes late.</strong> Split is 70% chef / 30% Foodie. ${c.firstName} gets ${R.POLICY.lateDiscountPct}% off the next booking automatically.</div>` : ''}
+    ${b.late.isLate ? html`<div class="card chilli small" style="margin-bottom:16px"><strong>Chef arrived ${b.late.minutesLate} minutes late.</strong> Split is 70% chef / 30% Dishit. ${c.firstName} gets ${R.POLICY.lateDiscountPct}% off the next booking automatically.</div>` : ''}
     <div class="cols">
       ${allocationPanel(b)}
       ${moneyPanel(b)}
@@ -217,7 +217,7 @@ function bookingView(id) {
         ${b.noteToChef ? html`<dt>Note to chef</dt><dd>${b.noteToChef}</dd>` : ''}
         ${b.times.arrivedAt ? html`<dt>Chef arrival (official)</dt><dd>${time(b.times.arrivedAt)}${b.times.customerArrivalConfirmedAt ? `, customer confirmed ${time(b.times.customerArrivalConfirmedAt)}` : ''}</dd>` : ''}
         ${b.ingredients.customerConfirmedAt ? html`<dt>Ingredients confirmed</dt><dd>${dateTime(b.ingredients.customerConfirmedAt)}</dd>` : ''}
-        ${b.cancellation ? html`<dt>Cancelled</dt><dd>By ${b.cancellation.by === 'admin' ? 'Foodie' : 'customer'}, ${dateTime(b.cancellation.at)}${b.cancellation.reason ? `: ${b.cancellation.reason}` : ''}</dd>` : ''}
+        ${b.cancellation ? html`<dt>Cancelled</dt><dd>By ${b.cancellation.by === 'admin' ? 'Dishit' : 'customer'}, ${dateTime(b.cancellation.at)}${b.cancellation.reason ? `: ${b.cancellation.reason}` : ''}</dd>` : ''}
       </dl>
       ${b.review ? html`<div class="card flat" style="margin-top:14px"><p class="strong">Customer review ${stars(b.review.overall)}</p><p class="small">${b.review.comment || 'No comment.'}</p>
         <p class="small muted">Food ${b.review.food || '–'}, professionalism ${b.review.professionalism || '–'}, punctuality ${b.review.punctuality || '–'}, cleanliness ${b.review.cleanliness || '–'}</p></div>` : ''}
@@ -356,17 +356,17 @@ function revenueView() {
     const batches = store.payoutBatches().filter((p) => p.chefId === c.id);
     return { c, count: closed.length, earned: closed.reduce((s, b) => s + R.settle(b).chefAmount, 0), late: closed.reduce((s, b) => s + R.settle(b).lateAdjustment, 0), paid: batches.filter((p) => p.status === 'paid').reduce((s, p) => s + p.amount, 0), due: batches.filter((p) => p.status === 'scheduled').reduce((s, p) => s + p.amount, 0) };
   }).filter((x) => x.count);
-  return shell('revenue', html`${head('Revenue', 'Standard split 80% chef / 20% Foodie. Late chef: 70% / 30%.')}
+  return shell('revenue', html`${head('Revenue', 'Standard split 80% chef / 20% Dishit. Late chef: 70% / 30%.')}
     <div class="cols">
       ${figure(money(sum.gross), 'Paid by customers', 'c3', 'rev-gross')}
       ${figure(money(sum.refunded), 'Refunded', 'c3', 'rev-refunded')}
       ${figure(money(sum.chef), 'Chef earnings, closed bookings', 'c3', 'rev-chef')}
-      ${figure(money(sum.foodie), 'Foodie earnings, closed bookings', 'c3', 'rev-foodie')}
+      ${figure(money(sum.foodie), 'Dishit earnings, closed bookings', 'c3', 'rev-foodie')}
       <div class="panel c12"><div class="split-bar" aria-hidden="true">
-        <span class="chef" style="width:${(sum.chef / Math.max(1, sum.gross)) * 100}%">Chefs</span><span class="foodie" style="width:${(sum.foodie / Math.max(1, sum.gross)) * 100}%">Foodie</span>
-        <span class="refund" style="width:${(sum.refunded / Math.max(1, sum.gross)) * 100}%">Refunds</span><span style="flex:1; background:var(--paper); color:var(--muted)">Open</span></div>
-        <p class="small muted" style="margin-top:10px">${plural(sum.standardCount, 'booking')} at the standard split, ${sum.lateCount} at the late-chef split, ${sum.cancelledCount} cancelled. ${plural(sum.openCount, 'open booking')} still to settle: about ${money(sum.estimatedChef)} to chefs and ${money(sum.estimatedFoodie)} to Foodie. Late-chef discounts given: ${money(sum.discounts)}.</p></div>
-      <div class="panel tight c12"><h2>Breakdown by booking</h2><div class="table-wrap"><table class="t" id="revenue-table"><thead><tr><th>Booking</th><th>Date</th><th>Status</th><th>Rule</th><th class="r">Paid</th><th class="r">Refunded</th><th class="r">Chef</th><th class="r">Foodie</th></tr></thead><tbody>
+        <span class="chef" style="width:${(sum.chef / Math.max(1, sum.gross)) * 100}%">Chefs</span><span class="foodie" style="width:${(sum.foodie / Math.max(1, sum.gross)) * 100}%">Dishit</span>
+        <span class="refund" style="width:${(sum.refunded / Math.max(1, sum.gross)) * 100}%">Refunds</span><span style="flex:1; background:var(--soft); color:var(--muted)">Open</span></div>
+        <p class="small muted" style="margin-top:10px">${plural(sum.standardCount, 'booking')} at the standard split, ${sum.lateCount} at the late-chef split, ${sum.cancelledCount} cancelled. ${plural(sum.openCount, 'open booking')} still to settle: about ${money(sum.estimatedChef)} to chefs and ${money(sum.estimatedDishit)} to Dishit. Late-chef discounts given: ${money(sum.discounts)}.</p></div>
+      <div class="panel tight c12"><h2>Breakdown by booking</h2><div class="table-wrap"><table class="t" id="revenue-table"><thead><tr><th>Booking</th><th>Date</th><th>Status</th><th>Rule</th><th class="r">Paid</th><th class="r">Refunded</th><th class="r">Chef</th><th class="r">Dishit</th></tr></thead><tbody>
         ${all.map((b) => { const s = R.settle(b); return html`<tr class="click" data-action="open" data-href="#/bookings/${b.id}" data-row="${b.id}"><td><a class="strong" href="#/bookings/${b.id}">${b.ref}</a><br><span class="small muted">${b.mealName}</span></td><td class="num">${dayMonth(b.scheduledAt)}</td><td>${chip('booking', b.status)}</td>
           <td class="small">${s.ruleLabel}</td><td class="r">${money(s.paid)}</td><td class="r">${s.refunded ? money(s.refunded) : '–'}</td><td class="r">${s.final ? money(s.chefAmount) : html`<span class="muted">~${money(s.chefAmount)}</span>`}</td><td class="r">${s.final ? money(s.foodieAmount) : html`<span class="muted">~${money(s.foodieAmount)}</span>`}</td></tr>`; })}</tbody>
         <tfoot><tr><td colspan="4">Closed bookings</td><td class="r">${money(sum.gross)}</td><td class="r">${money(sum.refunded)}</td><td class="r">${money(sum.chef)}</td><td class="r">${money(sum.foodie)}</td></tr></tfoot></table></div></div>
@@ -415,7 +415,7 @@ function supportView() {
         </div>`; }) : html`<div class="panel empty"><h3>Nothing here</h3><p>No ${filters.support === 'all' ? '' : filters.support} records.</p></div>`}</div></div>
       <div class="panel c4" style="align-self:start"><h2>Log a record</h2><div class="stack-s">
         <label class="field"><span>What happened</span><textarea class="input" id="inc-summary" data-input="form" data-form="incident" data-key="summary" maxlength="300">${forms.incident.summary}</textarea></label>
-        <label class="field"><span>Booking reference (optional)</span><input class="input" id="inc-ref" placeholder="FD-00000" value="${forms.incident.bookingRef}" data-input="form" data-form="incident" data-key="bookingRef"></label>
+        <label class="field"><span>Booking reference (optional)</span><input class="input" id="inc-ref" placeholder="DS-00000" value="${forms.incident.bookingRef}" data-input="form" data-form="incident" data-key="bookingRef"></label>
         <label class="field"><span>Severity</span><select class="input" id="inc-sev" data-change="form" data-form="incident" data-key="severity">${['low', 'medium', 'high'].map((v) => html`<option value="${v}" ${forms.incident.severity === v ? 'selected' : ''}>${v[0].toUpperCase() + v.slice(1)}</option>`)}</select></label>
         <button type="button" class="btn small block" data-action="add-incident">Log record</button></div></div>
     </div>`);
@@ -435,7 +435,7 @@ function modalView() {
 
   if (modal.type === 'cancel') {
     const b = F.booking(modal.id);
-    return wrap('Cancel booking', html`<h2>Cancel ${b.ref}?</h2><p>Foodie cancelling a booking refunds the customer <strong>100% (${money(b.pricing.total)})</strong>. Use this when no replacement chef can be found.</p>${text('reason', 'Reason', { placeholder: 'For example: no replacement chef available' })}${buttons('Cancel booking and refund 100%', 'danger solid')}`);
+    return wrap('Cancel booking', html`<h2>Cancel ${b.ref}?</h2><p>Dishit cancelling a booking refunds the customer <strong>100% (${money(b.pricing.total)})</strong>. Use this when no replacement chef can be found.</p>${text('reason', 'Reason', { placeholder: 'For example: no replacement chef available' })}${buttons('Cancel booking and refund 100%', 'danger solid')}`);
   }
   if (modal.type === 'contact') {
     const b = F.booking(modal.id);
