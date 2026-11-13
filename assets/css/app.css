@@ -287,11 +287,11 @@ body.phone { background: radial-gradient(120% 80% at 50% 0%, #2c2623 0%, #0f0e0d
   .app { border-radius: 0; }
 }
 .screen { flex: 1; overflow-y: auto; overscroll-behavior: contain; scrollbar-width: thin; }
-.screen.enter > *, .screen.enter > .pad > * { animation: rise 420ms var(--ease) both; }
-.screen.enter > .pad > *:nth-child(2) { animation-delay: 50ms; }
-.screen.enter > .pad > *:nth-child(3) { animation-delay: 100ms; }
-.screen.enter > .pad > *:nth-child(4) { animation-delay: 150ms; }
-.screen.enter > .pad > *:nth-child(n+5) { animation-delay: 200ms; }
+.screen.enter > *, .screen.enter > .pad > * { animation: rise 300ms var(--ease) both; }
+.screen.enter > .pad > *:nth-child(2) { animation-delay: 30ms; }
+.screen.enter > .pad > *:nth-child(3) { animation-delay: 60ms; }
+.screen.enter > .pad > *:nth-child(4) { animation-delay: 90ms; }
+.screen.enter > .pad > *:nth-child(n+5) { animation-delay: 120ms; }
 .pad { padding: 20px; }
 .topbar { position: sticky; top: 0; z-index: 5; display: flex; align-items: center; gap: 8px; min-height: 60px; padding: 6px 12px; background: var(--bg); }
 .topbar h1 { font-size: 19px; font-weight: 800; letter-spacing: -0.01em; flex: 1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
@@ -581,3 +581,60 @@ body.presenter { background: var(--deep); --focus-deep: var(--on-deep); height: 
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation-duration: 1ms !important; animation-iteration-count: 1 !important; transition-duration: 1ms !important; }
 }
+
+/* ------------------------------------------------ home: the plate carousel */
+.home { padding: 0 0 24px; }
+.home > * + * { margin-top: 24px; }
+.home > section > .section-title, .home-cards, .home > .demo-note, .home > .hello { margin-left: 20px; margin-right: 20px; }
+.home .hscroll { margin: 0; }
+.home-top { display: flex; align-items: center; justify-content: space-between; padding: 16px 20px 0; }
+.home-top .logo { width: 104px; min-width: 104px; }
+.home-top .avatar { width: 44px; height: 44px; text-decoration: none; }
+.home > .hello { margin-top: 14px; }
+.home .hello h1 { font-size: 32px; line-height: 1.04; max-width: 13ch; }
+.meta { display: flex; flex-wrap: wrap; align-items: center; gap: 2px 6px; font-size: 13px; font-weight: 700; color: var(--muted); }
+.meta b { color: var(--ink); font-weight: 800; font-variant-numeric: tabular-nums; }
+.meta span::before { content: '\00b7'; margin-right: 6px; }
+/* The smile from the logo, under one word, once per screen. */
+.smile-word { font-style: normal; position: relative; white-space: nowrap; }
+.smile-word::after { content: ''; position: absolute; left: 4%; right: 4%; bottom: -9px; height: 12px; border: solid var(--brand); border-width: 0 0 4px; border-radius: 0 0 60% 60% / 0 0 100% 100%; transform-origin: left center; animation: smile-draw 700ms 250ms var(--ease) both; }
+@keyframes smile-draw { from { transform: scaleX(0); opacity: 0; } }
+.plates { display: flex; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none; padding: 14px calc(50% - 132px) 4px; overscroll-behavior-x: contain; }
+.plates::-webkit-scrollbar { display: none; }
+.plate-slide { flex: none; width: 264px; scroll-snap-align: center; text-align: center; text-decoration: none; color: var(--ink); -webkit-tap-highlight-color: transparent; }
+.plate-slide .plate { width: 244px; margin: 0 auto 16px; padding: 9px; transition: transform 300ms var(--ease); }
+.plate-slide:active .plate { transform: scale(0.97); }
+.plate-slide h3 { font-size: 21px; font-weight: 900; line-height: 1.12; padding: 0 6px; min-height: 2.24em; display: grid; place-items: center; }
+.plate-slide .meta { justify-content: center; margin-top: 4px; }
+@supports (animation-timeline: view()) {
+  .plate-slide { animation: plate-focus linear both; animation-timeline: view(inline); }
+  @keyframes plate-focus { 0%, 100% { transform: scale(0.74); opacity: 0.5; } 50% { transform: scale(1); opacity: 1; } }
+}
+.plate-dots { display: flex; justify-content: center; gap: 6px; margin-top: 14px; }
+.plate-dots i { width: 7px; height: 7px; border-radius: 4px; background: var(--line); transition: width 260ms var(--ease), background 260ms; }
+.plate-dots i.on { width: 22px; background: var(--ink); }
+.plates-note { text-align: center; font-size: 13px; font-weight: 600; color: var(--muted); margin-top: 8px; }
+/* Food types: a row of small plates. */
+.cat-row { display: flex; gap: 14px; overflow-x: auto; scrollbar-width: none; padding: 4px 20px 10px; scroll-snap-type: x proximity; }
+.cat-row::-webkit-scrollbar { display: none; }
+.cat-row .cat { flex: none; width: 92px; scroll-snap-align: start; }
+.cat-row .cat .plate { padding: 4px; }
+.cat-row .cat strong { font-size: 13.5px; line-height: 1.2; margin-top: 9px; }
+.section-title a { font-size: 14px; font-weight: 800; color: var(--ink); text-underline-offset: 3px; }
+.home .hscroll { padding: 4px 20px 22px; }
+.meal-card .meta { margin-top: 2px; }
+
+/* ------------------------------------------------ booking: one question at a time */
+.topbar .thumb { width: 40px; height: 40px; border: 0; box-shadow: 0 0 0 3px var(--rim), 0 4px 10px -4px rgba(60, 40, 30, 0.4); margin-right: 8px; border-radius: 50%; }
+.wizard .step-count { font-size: 13px; font-weight: 800; letter-spacing: 0.06em; text-transform: uppercase; color: var(--brand-ink); margin-bottom: 6px; }
+.wizard .question { font-size: 30px; font-weight: 900; line-height: 1.06; letter-spacing: -0.02em; margin-bottom: 14px; max-width: 14ch; }
+.people-dots { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; max-width: 250px; margin: 18px auto 10px; }
+.people-dots i { width: 26px; height: 26px; border-radius: 50%; box-shadow: inset 0 0 0 2px var(--line); transition: background 240ms var(--ease), box-shadow 240ms, transform 320ms var(--ease); transform: scale(0.82); }
+.people-dots i.on { background: var(--brand); box-shadow: inset 0 0 0 4px var(--bg), 0 0 0 2px var(--brand); transform: scale(1); }
+.done-plate { position: relative; width: 170px; margin: 0 auto; animation: plate-in 800ms var(--ease) both; }
+.done-tick { position: absolute; right: 2px; bottom: 6px; width: 48px; height: 48px; border-radius: 50%; background: var(--ok) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M6 12.6l3.8 3.8L18 8.2' fill='none' stroke='%23fff' stroke-width='2.8' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center / 28px no-repeat; box-shadow: 0 0 0 4px var(--bg); animation: pop 520ms 480ms var(--ease) both; }
+@keyframes pop { 0% { transform: scale(0); } 70% { transform: scale(1.12); } }
+.finding .dots { display: inline-flex; gap: 4px; margin-left: 8px; vertical-align: middle; }
+.finding .dots i { width: 6px; height: 6px; border-radius: 50%; background: currentColor; animation: wait 1.2s ease-in-out infinite; }
+.finding .dots i:nth-child(2) { animation-delay: 0.15s; } .finding .dots i:nth-child(3) { animation-delay: 0.3s; }
+@keyframes wait { 0%, 60%, 100% { opacity: 0.25; transform: translateY(0); } 30% { opacity: 1; transform: translateY(-3px); } }

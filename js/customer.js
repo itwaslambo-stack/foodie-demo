@@ -155,13 +155,16 @@ function mealsIn(categoryId) {
   return S().meals.filter((m) => m.active && m.categoryId === categoryId);
 }
 
+const cookText = (m) => (m.cookMinutes >= 60 ? `${Math.round(m.cookMinutes / 30) / 2} hours` : `${m.cookMinutes} minutes`);
+const mealMeta = (m) => html`<p class="meta"><b>From ${money(m.basePriceCents)}</b><span>${R.POLICY.baseServings} people</span><span>about ${cookText(m)}</span></p>`;
+
 function mealCard(m) {
   return html`<a class="meal-card" href="#/meal/${m.id}">
     ${photo(m.image, m.name)}
     <div class="body stack-s">
       <h3>${m.name}</h3>
       <p class="small muted">${m.description}</p>
-      <p><span class="price">From ${money(m.basePriceCents)}</span> <span class="small muted">for ${R.POLICY.baseServings} people</span></p>
+      ${mealMeta(m)}
     </div>
   </a>`;
 }
@@ -171,29 +174,39 @@ function homeView() {
   const next = myBookings().filter((b) => R.isOpen(b.status)).sort((a, b) => a.scheduledAt - b.scheduledAt)[0];
   const toReview = myBookings().find((b) => b.status === 'completed' && !b.review);
   const favourites = ['pap-beef-stew-vegetables', 'seven-colours', 'braai-platter', 'salmon-platter', 'sirloin-chips'].map((id) => S().meals.find((m) => m.id === id && m.active && S().categories.some((c) => c.id === m.categoryId && c.active))).filter(Boolean);
-  const [feature, ...more] = favourites;
-  return shell(html`<main class="screen"><div class="pad stack">
-      <div class="row spread top hello">
-        <div><p class="muted">Hi ${c.firstName}</p><h1>What are you feeling like eating today?</h1></div>
+  const rows = activeCategories().map((cat) => ({ cat, meals: mealsIn(cat.id) })).filter((r) => r.meals.length > 1).slice(0, 3);
+  return shell(html`<main class="screen"><div class="home">
+      <div class="home-top">
+        <span class="logo-pair"><img class="logo logo-light" src="assets/img/brand/logo.png" alt="Dishit" width="1017" height="411"><img class="logo logo-dark" src="assets/img/brand/logo-dark.png" alt="" width="1017" height="411"></span>
+        <a class="avatar" href="#/account" aria-label="Your account">${c.firstName.slice(0, 1)}</a>
       </div>
-      ${c.discount ? html`<div class="card mielie"><p class="strong">${c.discount.pct}% off your next Dishit</p><p class="small">Your last chef arrived late. The discount comes off automatically at checkout.</p></div>` : ''}
-      ${next ? html`<a class="card indigo mini-booking" href="#/booking/${next.id}">
+      <div class="hello"><p class="muted">Hi ${c.firstName}</p><h1>What are you feeling like eating <em class="smile-word">today?</em></h1></div>
+      ${c.discount || next || toReview ? html`<div class="home-cards stack-s">
+        ${c.discount ? html`<div class="card mielie"><p class="strong">${c.discount.pct}% off your next Dishit</p><p class="small">Your last chef arrived late. The discount comes off automatically at checkout.</p></div>` : ''}
+        ${next ? html`<a class="card indigo mini-booking" href="#/booking/${next.id}">
           ${photo(next.image, '')}
           <div class="grow"><p class="small muted">${R.ACTIVE_STATUSES.includes(next.status) ? 'Happening now' : 'Your next Dishit'}</p><p class="strong">${next.mealName}</p><p class="small">${dateShort(next.scheduledAt)} at ${time(next.scheduledAt)}, ${R.LABELS.booking[next.status].toLowerCase()}</p></div>
         </a>` : ''}
-      ${toReview && !next ? html`<a class="card mielie mini-booking" href="#/booking/${toReview.id}">${photo(toReview.image, '')}<div class="grow"><p class="strong">How was your ${toReview.mealName}?</p><p class="small">Leave a review</p></div></a>` : ''}
-      ${feature ? html`<a class="feature" href="#/meal/${feature.id}">
-          ${photo(feature.image, feature.name)}
-          <div class="cap"><span class="kicker">Booked most this month</span><h3>${feature.name}</h3><p>From ${money(feature.basePriceCents)} for ${R.POLICY.baseServings} people</p></div>
-        </a>` : ''}
-      <div><div class="section-title"><h2>Choose your kind of meal</h2></div>
-        <div class="cat-grid">
+        ${toReview && !next ? html`<a class="card mielie mini-booking" href="#/booking/${toReview.id}">${photo(toReview.image, '')}<div class="grow"><p class="strong">How was your ${toReview.mealName}?</p><p class="small">Leave a review</p></div></a>` : ''}
+      </div>` : ''}
+      ${favourites.length ? html`<section aria-label="Booked most this month">
+        <div class="plates" id="plates" tabindex="0">
+          ${favourites.map((m) => html`<a class="plate-slide" href="#/meal/${m.id}">
+            <div class="plate">${photo(m.image, '')}</div>
+            <h3>${m.name}</h3>${mealMeta(m)}
+          </a>`)}
+        </div>
+        <div class="plate-dots" id="plate-dots" aria-hidden="true">${favourites.map((_, i) => html`<i class="${i === 0 ? 'on' : ''}"></i>`)}</div>
+        <p class="plates-note">Booked most this month. Swipe to see more.</p>
+      </section>` : ''}
+      <section><div class="section-title"><h2>Choose your kind of meal</h2></div>
+        <div class="cat-row">
         ${activeCategories().map((cat) => html`<a class="cat" href="#/category/${cat.id}">
           <div class="plate">${photo(cat.image, '')}</div><strong>${cat.name}</strong>
         </a>`)}
-        </div></div>
-      ${more.length ? html`<div><div class="section-title"><h2>More favourites</h2></div>
-        <div class="hscroll">${more.map(mealCard)}</div></div>` : ''}
+        </div></section>
+      ${rows.map(({ cat, meals }) => html`<section><div class="section-title"><h2>${cat.name}</h2><a href="#/category/${cat.id}">See all</a></div>
+        <div class="hscroll">${meals.map(mealCard)}</div></section>`)}
       <p class="demo-note">Demonstration content. Meals, prices and photos are samples, not approved commercial pricing.</p>
     </div></main>`);
 }
@@ -217,7 +230,7 @@ function mealView(id) {
       <div class="hero"><a class="icon-btn" href="#/category/${m.categoryId}" aria-label="Back to ${cat.name}">${icon('back')}</a>${photo(m.image, m.name)}</div>
       <div class="pad stack">
         <div class="stack-s">
-          <p><span class="chip indigo plain">${cat.name}</span> <span class="chip plain">About ${m.cookMinutes >= 60 ? `${Math.round(m.cookMinutes / 30) / 2} hours` : `${m.cookMinutes} minutes`} to cook</span></p>
+          <p><span class="chip indigo plain">${cat.name}</span> <span class="chip plain">About ${cookText(m)} to cook</span></p>
           <h1>${m.name}</h1>
           <p class="muted">${m.description}</p>
         </div>
@@ -265,7 +278,8 @@ function bookView(mealId, query) {
         <output id="people" aria-live="polite">${d.servings}</output>
         <button type="button" data-action="people" data-by="1" aria-label="One person more" ${d.servings >= R.POLICY.maxServings ? 'disabled' : ''}>+</button>
       </div>
-      <p class="small muted" style="text-align:center">${R.POLICY.minServings} to ${R.POLICY.maxServings} people</p>
+      <div class="people-dots" aria-hidden="true">${Array.from({ length: R.POLICY.maxServings }, (_, i) => html`<i class="${i < d.servings ? 'on' : ''}"></i>`)}</div>
+      <p class="small muted" style="text-align:center">One plate each. ${R.POLICY.minServings} to ${R.POLICY.maxServings} people</p>
       <div class="card flat" style="margin-top:20px"><dl class="kv">
         <dt>${R.POLICY.baseServings} people</dt><dd class="num">${money(m.basePriceCents)}</dd>
         ${d.servings > R.POLICY.baseServings ? html`<dt>${d.servings - R.POLICY.baseServings} extra at ${money(m.extraPersonCents)}</dt><dd class="num">${money((d.servings - R.POLICY.baseServings) * m.extraPersonCents)}</dd>` : ''}
@@ -343,10 +357,10 @@ function bookView(mealId, query) {
 
   return shell(html`${html`<div class="topbar">
       <button type="button" class="icon-btn" data-action="wizard-back" aria-label="Back">${icon('back')}</button>
-      <h1>${m.name}</h1><span class="small muted" style="padding-right:8px">${Math.min(d.step, 4)} of 4</span></div>`}
-    <main class="screen">
-      <div class="steps" style="padding-top:14px" aria-hidden="true">${[1, 2, 3, 4].map((n) => html`<i class="${n <= d.step ? 'on' : ''}"></i>`)}</div>
-      <div class="pad"><h2 style="margin-bottom:10px">${WIZARD[Math.min(d.step, 4) - 1]}</h2>${body}</div>
+      <h1>${m.name}</h1>${photo(m.image, '', 'thumb')}</div>`}
+    <main class="screen wizard">
+      <div class="steps" style="padding-top:6px" aria-hidden="true">${[1, 2, 3, 4].map((n) => html`<i class="${n <= d.step ? 'on' : ''}"></i>`)}</div>
+      <div class="pad"><p class="step-count">Step ${Math.min(d.step, 4)} of 4</p><h2 class="question">${WIZARD[Math.min(d.step, 4) - 1]}</h2>${body}</div>
     </main>`, { tabs: false, footer: cta });
 }
 
@@ -365,11 +379,11 @@ function confirmedView(id) {
   const b = store.find.booking(id);
   if (!b || b.customerId !== S().session.customerId) return notFound('That booking could not be found', '#/bookings');
   return shell(html`<main class="screen"><div class="pad stack" style="text-align:center; padding-top:36px">
-      <div class="plate" style="width:150px; margin:0 auto">${photo(b.image, '')}</div>
+      <div class="done-plate"><div class="plate">${photo(b.image, '')}</div><span class="done-tick" aria-hidden="true"></span></div>
       <h1>Your Dishit booking has been received!</h1>
       <div><p class="muted small">Booking reference</p><p class="big-ref" id="booking-ref">${b.ref}</p></div>
       <p>${b.mealName} for ${b.servings}<br>${dateLong(b.scheduledAt)} at ${time(b.scheduledAt)}</p>
-      <div class="card mielie"><p class="strong">Finding your chef…</p><p class="small">Dishit is choosing the right chef for you. We will let you know as soon as they confirm.</p></div>
+      <div class="card mielie finding"><p class="strong">Finding your chef…<span class="dots" aria-hidden="true"><i></i><i></i><i></i></span></p><p class="small">Dishit is choosing the right chef for you. We will let you know as soon as they confirm.</p></div>
       <p class="small muted">Simulated payment of ${money(b.pricing.total)} approved (${b.payment.reference}).</p>
       <a class="btn block" href="#/booking/${b.id}">Track this booking</a>
       <a class="btn block quiet" href="#/home">Back to home</a>
@@ -716,6 +730,17 @@ setDemoFocus(() => {
   const id = window.location.hash.match(/^#\/booking\/(\w+)/);
   return (id && mine.find((b) => b.id === id[1])) || mine.sort((a, b) => b.createdAt - a.createdAt)[0] || null;
 });
+
+// Home plate carousel: keep the dots in step with the plate in the middle.
+document.addEventListener('scroll', (e) => {
+  const el = e.target;
+  if (!el || el.id !== 'plates') return;
+  const slide = el.querySelector('.plate-slide');
+  const dots = document.querySelectorAll('#plate-dots i');
+  if (!slide || !dots.length) return;
+  const index = Math.max(0, Math.min(dots.length - 1, Math.round(el.scrollLeft / slide.offsetWidth)));
+  dots.forEach((d, i) => d.classList.toggle('on', i === index));
+}, true);
 
 const app = mount({
   root: document.getElementById('app'),
